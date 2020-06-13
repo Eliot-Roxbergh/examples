@@ -1,0 +1,219 @@
+#This collection is a few years old
+#Strip lines starting with # to get condensed version
+
+
+
+#Monitoring
+    lm-sensors         # temperature
+    smartctl             # smart-values CLI
+    gsmartcontrol # smart-values GUI
+
+# Fan control
+    #    https://wiki.archlinux.org/index.php/fan_speed_control
+    #fancontrol  # (pwmconfig)
+
+# Favorite commands:
+    #  Storage:
+        echo "0 0 0" | sudo tee -a /sys/class/scsi_host/host<n>/scan    #rescan SCSI-/SATA-bus '<n>' if hotswap problems or simply '*' (at own risk)
+        echo 1 | sudo tee -a /sys/block/DEVICE-HERE/device/delete     #hotswapping sata devices #safely remove harddrive
+        du -sh *    #space used
+        df -h       #partitions and storage space
+        parted -l   #harddrives and partitions
+        lsblk       #block devices (mounted stuff)
+        lsusb
+        lscpu
+        lspci
+        sync; sudo eject /dev/sdX    #eject usb-device
+        sudo dd if=~/Downloads/file.iso of=/dev/sdX bs=4M && sync && sudo eject /dev/sdX; #bootable USB
+  
+    # Files & text:
+        find /path/to/search/ -name '*filename*' -exec cp {} /send/file/here/if/found/  \;
+        cat file.txt >> collection.txt
+        find . -iname "find me"   #alternatives include: whereis, locate
+        dpkg -S `which firefox`   #to see what provides command
+        ls -l | wc -l             #word count, here we count files
+        grep "find me" *.txt      #-l for only showing file names, better than cat *.txt |grep "find me"
+        chmod -R -x+X *           #disallow execution of all files (without screwing with folders!)
+        type ls #alias and function information about 'ls'
+
+        # sed:
+            ##sed stuff here?
+        # awk:
+            ##awk stuff here?
+  
+    # Networking:
+        nmap  192.168.1.X       #scan ports below 1000
+        nmap -p- 192.168.1.X    #scan all ports
+        nmap -O 192.168.1.0/24  #scan devices for kernel , ports and MAC
+        nmap -sP 192.168.1.0/24 #scan devices for MAC adr
+        netstat -l --inet       #active connections (ports)
+        netstat -tuplen         #active connections (ports)
+        rsync --progress --ignore-existing -rve ssh /path/file user@192.168.1.X:"~/"  # (Note partial files are kept), in other direction just switch place
+        ping 1.1.1.1
+    # System:
+        ps -e #processes
+        id    #groups [users] [-Gn]
+  
+    # Encryption:
+        # Setting up LUKS  (More info at archwiki)
+        #ASSUMING empty disk with partition table (use fdisk)
+            sudo cryptsetup -v --verify-passphrase luksFormat /dev/sdX  # 0/5 disk encryption
+            sudo cryptsetup luksOpen /dev/sdX sdZ  # 1/5 disk encryption
+            dd if=/dev/urandom of=/dev/mapper/LUKSdrive-name  # 2/5 disk encryption (faster ways exist)
+            sudo mkfs.ext4 /dev/mapper/sdZ  # 3/5 disk encryption EXT4
+            sudo mount /dev/mapper/sdZ /media/diskY   # 4/5 disk encryption
+            sudo chown user:user /media/diskY -R    #5/5 disk encryption
+            
+            sudo umount /dev/sdX  
+            sudo cryptsetup luksClose /dev/sdX #
+    
+        mount -t ecryptfs encrypted_dir decrypted_dir #decrypted_dir can be same as origin 
+    
+    # encrypted archive
+        tar czvpf - .vim | gpg --symmetric --cipher-algo aes256 -o files.tar.gz.gpg  #compress & encrypt
+        gpg -d files.tar.gz.gpg | tar xzvf -     #decrypt & decompress
+
+    # Verify
+         #verify file, import pub key first
+         gpg --verify *.iso.sig *.iso
+          
+         #verify APK, some options
+         apksigner verify file.apk
+         jarsigner -verbose -certs -verify  file.apk | less
+         unzip -p file.apk META-INF/RSA.RSA | keytool -printcert
+         #TODO I'm not sure if this is enough, as there exist ways of actually verifying everything according to manifest (req. public key)
+
+
+#  Div:
+    <(commands) #instead of filename #process substitution
+    ip addr show
+        sudo shutdown -h 0
+        sudo systemctl MyService status
+        man
+        #> >> | & || &&
+    apt update; apt dist-upgrade -y; #dist-upgrade aka "smart upgrade"
+    apropos   #search man page
+    youtube-dl -o - https://www.youtube.com/watch... | vlc -    #watch youtube videos in vlc without saving to file
+    youtube-dl "ytsearch: blabla"
+    -x --audio-format mp3 #audio only, mp3
+    -f "best[height=720]" #best 720p quality
+
+
+    livestreamer https://www.youtube.com/watch...               #watch youtube videos in vlc without saving to file
+    printenv #printing environment variables
+
+    #Example for laptop and secondary screen
+    xrandr --output LVDS-1 --auto --output VGA-1 --auto --left-of LVDS-1 
+    #Btw this probably fucks up mouse sense. If you want, configure with xset
+     
+    #install .deb
+    sudo dpkg -i file.deb; sudo apt-get install -f
+  
+    # Change looks of terminal, so your machines look different in ssh.
+    #BASH
+        #    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;35;40m\]\u@\h\[\033[00;40m\]:\[\033[01;34;40m\] \w\[\033[01;32;40m\] '
+    
+    #ZSH    ( Colors https://en.wikipedia.org/wiki/ANSI_escape_code#Colors ) (optional: $(git_prompt_info) )
+        #    PROMPT='%{$bg[red]%}%{$fg_bold[black]%}$HOST %{$bg[black]%}%{$fg_bold[black]%}-%{$reset_color%}%{$bg[magenta]%}%{$fg[grey]%}  '
+        
+    #Mirror website to disk
+    #Add --no-parent for excluding parent dirs from given uri
+    wget --recursive --page-requisite --convert-links --domains site.se www.site.se
+    
+    #compare two folders, what files differ / not present
+    diff -qNr --speed-large-files dir1 dir2 
+   
+    #Maximal compress with tar
+    env GZIP=-9 tar cvzf file.tar.gz /path/to/directory
+    tar -cf -  files/ | xz --threads=0 > files.tar.xz #good, multicore compression
+    
+        #set keyboard layout
+        #keymap goes here  /usr/share/X11/xkb/symbols/
+        setxkbmap se
+    
+        # write to file with sudo
+        echo "Defaults insults" | sudo tee -a /etc/sudoers
+
+     #Get random string from /dev/urandom
+     cat /dev/urandom | base64 | tr -dc 'a-zA-Z0-9' | fold -w 4 | head -n 1
+        
+# Tmux (see tools.txt for keybindings)    
+    tmux new -s session_name
+    tmux attach -t session_name
+    tmux switch -t session_name
+    tmux list-sessions
+   
+# Git:
+    git status  # see uncommited changes
+    git log          # commit history
+    git show    # show precise changes in log?
+    git diff      # show changes
+    git merge
+    git stash save [--no-keep-index]
+    git stash drop stash@\{0\}
+    git config --global credential.helper cache && git config --global credential.helper 'cache --timeout=10000'
+
+# LVM:
+    sudo vgscan         # scan
+    sudo vgchange -a y  # activate
+  
+# Div apps:
+    shellcheck #for checking bash scripts
+    exiftool -all= *.jpg #remove exif-data
+
+# C-programming:
+    #    memory leaks:
+        valgrind --leak-check=yes ./binary.so args
+        
+    # fuzzy:
+        AFL_SKIP_CPUFREQ=1 afl-fuzz -n -o out/ -i in/ ./a.out
+
+    # compilation example:
+        gcc -Wall -g -o file.so file.c
+        gcc -Wall -g -shared -fPIC -o file.so file.c
+
+    # debugging: (compile with -g)
+        #    gdb:
+            # run function directly
+                # load file.so
+                # run main
+
+            # debug core dump, e g segmentation fault
+            gdb file.so core
+
+            # break line
+            #    break function
+            #    l              // list
+            #    p var     // print
+            #    c              // continue (to next breakpoint)
+            #    s             // step
+            #    bt             // backtrace
+            
+# Docker: 
+    #shell in
+    docker exec -it CONTAINER_ID bash
+
+    #delete all unused data
+    docker system prune -a
+    #delete stopped containers
+    docker container prune
+    #delete image
+    docker rmi deadbeef
+    #delete container
+    docker rm deadbeef
+
+    #see running containers
+    docker ps
+    #see all images
+    docker images
+
+# System div
+  sysctl -a #kernel params
+  glances xosview #collected system info
+  ulimit
+  http://inotify.aiken.cz/?section=incron&page=about&lang=en #cron but folder change?
+  https://sourceforge.net/projects/whowatch/ https://www.gnu.org/software/acct #watch users and stuff?
+  http://tldp.org/LDP/Linux-Filesystem-Hierarchy/html/proc.html #ReadMe
+  
+  #get time from network
+  timedatectl set-ntp true 

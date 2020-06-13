@@ -1,0 +1,130 @@
+#!/usr/bin/env bash
+
+### Buffers and redirect ###
+
+#buffers 0=STDIN, 1=STDOUT, 2=STDERR, then 3 up to 9 are available for use
+
+#exec without command argument will redirect IO for current program e.g.
+#send stdout to /dev/null via file descriptor 9
+exec 9>/dev/null 1>&9
+#restore stdout so we can see it
+exec &>/dev/tty
+
+# example of redirect, get use to this //Gustav
+cat < my_file.txt > my_new_file.txt
+
+### Man pages ###
+
+man #regular man pages
+help #for help bash
+apropos #search man pages (man)
+
+### Symlinks and inodes ###
+
+readlink #shows symlink info, also see f flag
+
+#hardlink points to underlying inode so multiple can exist, and as long as any do exist the inode cannot be overwritten
+#hardlink cannot point to folder as this would create loops
+#however, symbolic (soft) links can point to folders since `readlink` shows the real path.
+
+
+#use `stat` to see amount of (hard) links to a file, and other such info
+stat
+readlink
+ln a b
+ln -s a b
+
+### Bash shortcuts ###
+
+#0th argument of last command
+echo !:0
+
+#return from last command ("error code") for C errors see errno
+echo $?
+
+
+### grep, sed, awk
+
+# grep, cut, wc can perform a lot of basic operations
+# sed seems to be good for a lot of things, e.g. search and replace stuff
+    # example: find all headers (# ## ### etc) and add AS MANY # to the end of line
+# awk, a benefit here is that we can use variables and arrays to count and sum results, easily maintain data over multiple lines
+
+### SED append corresponding nr of '#' ###
+
+#save starting '#' (at least 1) to group and append last to line
+#s/ for search and replace
+#\) group hits for later use as \1 and \2 ('#' and rest of text)
+#Note that spaces have a meaning for the matching
+#find rows starting with AT LEAST one '#' and save as first group, rest '.*' (all chars) to the end of row ($) save as second group. Finally the text is printed as \1 \2 \1, i.e. the starting '#' are repeated at the end.
+
+sed -i -E "s/^(#+)(.*)$/\1\2 \1/" example_doc.txt
+sed -i -E "s/^\(##*\)\(.*\)$/\1\2 \1/" example_doc.txt
+
+
+### Find users with bash as shell ###
+
+#use cut to get first word before delimiter :
+grep "/bin/bash" /etc/passwd | cut -d \: -f 1
+
+#find lines ending with 'bash', each hit perform search and replace
+sed -E "/.*bash$/ { s/^(\w*).*$/\1/;p };d" < /etc/passwd
+
+#set separator ':', match regex, and print first string (before separator)
+awk -F: '/bash/{ print $1 }' < /etc/passwd
+
+
+### Lines without word ###
+
+grep -v "daemon" /etc/group
+
+sed -E "/daemon/d" < /etc/group
+
+awk '!/daemon/' < /etc/group
+
+
+### Count hits and show relevant lines ###
+
+#print matching lines numbers
+awk '/localhost/{print "Line " NR " matches"}' < /etc/hosts
+
+# Count nr of hits (i) and matching line numbers (NR)
+# TODO this seems broken!
+#awk '/localhost/{i=0}{i++} /localhost/{print "Line " NR " matches"} END {print i " hits"}' < /etc/hosts
+
+
+### List files with numbers (exclude folders) ###
+
+#ls -p to list folders with / at the end
+ls -p /etc/ | grep -v ".*/$"| grep "[0-9]"
+
+ls -p /etc/ | awk "! /.*\/$/ && /[0-9]/"
+
+#delete lines ending in /, then print lines containing at least a number, delete all lines
+ls -p /etc/ |sed -E "/\/$/ d; /[0-9]/ p; d"
+
+
+### SUM variables with awk ###
+
+#If third argument delimted by : only contains digits add it to sum
+awk -F ':' '$3 ~ /^[0-9]+$/ {sum+=$3} END {print sum}' < /etc/passwd
+
+### AWK DIV ###
+
+#BEGIN {
+#    # Things to be done before you start processing rows.
+#}
+#{
+#    # Things to be done for each row.
+#}
+#END {
+#    # Things to be done after processing the last row.
+#}
+
+
+### Div ###
+
+#simple find exact filename
+ls /usr/share/doc -R | grep "^README$"
+
+
