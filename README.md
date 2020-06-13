@@ -1,1 +1,1 @@
-# examples
+# examples on using Linux terminal
