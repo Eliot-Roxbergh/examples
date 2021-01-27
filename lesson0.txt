@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Copyright Eliot Roxbergh, licensed under AGPLv3
 
 ### Buffers and redirect ###
 
@@ -10,7 +11,7 @@ exec 9>/dev/null 1>&9
 #restore stdout so we can see it
 exec &>/dev/tty
 
-# example of redirect, get use to this //Gustav
+# example of redirect, get use to this
 cat < my_file.txt > my_new_file.txt
 
 ### Man pages ###
@@ -50,7 +51,7 @@ echo $?
     # example: find all headers (# ## ### etc) and add AS MANY # to the end of line
 # awk, a benefit here is that we can use variables and arrays to count and sum results, easily maintain data over multiple lines
 
-### SED append corresponding nr of '#' ###
+### sed append corresponding nr of '#' ###
 
 #save starting '#' (at least 1) to group and append last to line
 #s/ for search and replace
@@ -61,6 +62,18 @@ echo $?
 sed -i -E "s/^(#+)(.*)$/\1\2 \1/" example_doc.txt
 sed -i -E "s/^\(##*\)\(.*\)$/\1\2 \1/" example_doc.txt
 
+### sed replace hex string of specified length and custom error codes ###
+
+# On lines starting with 'COMMIT_ID', replace any 40 hex strings (e.g. sha-1 commit id) on that line.
+# If the substition was not successful return error code 5.
+commit_id="64ae3be7e4aa6c19535fbe5b5424235832726bdb"
+sed -i -E "/^COMMIT_ID/  {s/[A-Fa-f0-9]{40}/${commit_id}/;t;q5}" example_doc.txt
+
+# ;t;q5 = means if command successful restart cycle, else (execute the q5 command) set error code to be 5.
+# 	      As far as I understand "restart cycle" just means go to next line of input and continue
+
+# Read more here: https://www.grymoire.com/Unix/Sed.html#uh-58
+#                 https://www.gnu.org/software/sed/manual/sed.txt
 
 ### Find users with bash as shell ###
 
