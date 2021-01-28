@@ -1,0 +1,33 @@
+Dynamic linking:
+Use ldd (NOTE: this might in some cases execute the binary itself)
+
+ldd is recursive and can therefore give different results on different machines.
+To avoid this you may use objdump or readelf (objdump -p ?)
+
+$ readelf -d /bin/ls | grep 'NEEDED'
+    0x0000000000000001 (NEEDED)             Shared library: [libselinux.so.1]
+    0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+$ locate libselinux.so.1
+    /lib/x86_64-linux-gnu/libselinux.so.1
+
+Also remember lsof to find open files by process
+$ pidof nginx
+    6920 6919
+$ lsof -p 6919|grep mem
+
+Read the man page for dynamic linker for details of where libraries are looked for.
+(e.g order of precedence: rpath > LD_LIBRARY_PATH > runpath) [1]
+$ man 8 ld.so
+
+nm - list symbols from object files
+$ nm static_shared
+    0000000100000000 T __mh_execute_header
+    0000000100000f20 T _main
+                     U _pi_shared
+    0000000100001020 D _pi_static
+                     U _printf
+                     U dyld_stub_binder
+
+
+[1] - https://medium.com/nataraj-raghavendra/rpath-vs-runpath-883029b17c45
+      See also command chrpath - change the rpath or runpath in binaries
