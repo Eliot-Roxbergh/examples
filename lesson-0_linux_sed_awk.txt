@@ -125,7 +125,7 @@ ls -p /etc/ |sed -E "/\/$/ d; /[0-9]/ p; d"
 awk -F ':' '$3 ~ /^[0-9]+$/ {sum+=$3} END {print sum}' < /etc/passwd
 
 # A quick one liner to sum and calculate the average of two different types of variables and compare
-awk 'function get_answer(){tmp=sum/nr_of_vals; sum=0; nr_of_vals=0; return tmp} /^Total/{sum+=$6;nr_of_vals+=1} /\#BREAK\#/{first=get_answer()} END{second=get_answer(); print first, second, "First is faster by: " (second/first-1)*100 "%"}' input.txt
+awk 'function get_answer(){tmp=sum/nr_of_vals; sum=0; nr_of_vals=0; return tmp} /^Total/{sum+=$6;nr_of_vals+=1} /#BREAK#/{first=get_answer()} END{second=get_answer(); print first, second, "First is faster by: " (second/first-1)*100 "%"}' input.txt
 #   Outputs e.g.: "2.02077 2.20038 First is faster by: 8.88847%
 #   Lines starting with "Total" sum 6th column
 #   Lines containing "#BREAK#" separates the to 
