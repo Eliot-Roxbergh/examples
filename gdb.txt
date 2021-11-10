@@ -1,0 +1,35 @@
+###### GDB ######
+
+gdb --args my-file arg1 arg2 ...
+gdb --tui my-file #split screen with source code (same as "ctrl+x a")
+
+# GDB uses several emacs-like bindings
+#   When using TUI these might be extra useful:
+#     ctrl+x a - enable/disable TUI
+#     ctrl+x o - change active window
+#     ctrl+x 1 - TUI layout with one window  (show source)
+#     ctrl+x 2 - TUI layout with two windows (show source and assembly)
+#     ctrl+l - refresh/clear screen
+#   It is also possible to show more things, such as register values, in the TUI windows
+
+br my_func
+br my_file.c:123
+del //delete all breakpoints
+
+shell [<cmd>]
+
+run // start and run program
+start //start but don't run directly
+continue
+
+step // or use "next" to avoid stepping into function)
+finish //stop after return from current function
+print *my_struct //print struct data
+display *my_struct //same as print but persistent (show every time it changes!)
+where //same as "bt"
+list //show code around current line
+
+info //a lot can be printed with info
+info registers
+info args //arguments to current function
+info locals //current local variables
