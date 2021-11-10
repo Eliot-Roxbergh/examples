@@ -1,0 +1,60 @@
+
+###### Terminal settings / general ######
+
+#   See also https://www.shell-tips.com/bash/environment-variables/ and https://www.shell-tips.com/bash/shortcuts/
+
+#show bindings for your terminal (i.e. readline bindings)
+# (default Bash shortcuts are based on Emac shortcuts)
+bind -p 
+
+# Basic, default, Bash bindings to enjoy
+#Move one word back:    alt+b  (ctrl+b = move one character instead)
+#Move one word forward: alt+f  (ctrl+f = move one character instead)
+#Start of line: <HOME> or ctrl+a
+#End of line:   <END>  or ctrl+e
+
+#In Bash and other programs (e.g. Git)
+# use -- to show that this is the end of commands and next is only user input
+# For instance, `cat -- -v` will show the file called "-v" instead of the command -v
+ 
+# Bash programming `set -e` and `set -u` might be useful
+# e.g. #!/bin/bash -eu
+# -u error on unset variable
+# -e exit on error (very unreliable, only for the lazy coder, ... should use "| exit 1", or "| my_error()" )
+# btw you may not trap in a trap in Bash programming
+
+
+###### UNIX stuff ######
+
+#   (see manpage for command for powerful options)
+basename #/a/b/bin.c -> bin.c
+dirname  #/a/b/bin.c -> /a/b
+
+# "For each NAME, indicate how it would be interpreted if used as a command name "
+# e.g. type vim -> vim is /usr/bin/vim,
+#   or type ls -> ls is aliased to `ls --color=auto'
+type <command>
+
+
+###### Git ######
+
+#default order is chronological which might get weird if branches have been merged
+#   use topo-order to see a more reasonable logical order
+git log --topo-order
+git log --stat #see files changed
+
+git push origin --delete <branch>
+
+
+###### GDB ######
+
+TODO
+
+
+###### More ######
+
+#extract archive to a folder based on archive name, here "MY_STUFF/"
+tar xvf MY_STUFF.tar.gz --one-top-level 
+
+#see stats for a program, quite many uses
+time
