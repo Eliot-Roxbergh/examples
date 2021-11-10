@@ -1,0 +1,16 @@
+# set -e` and `set -u` might be useful (same as #!/bin/bash -eu)
+# -u error on unset variable
+# -e exit on error (very unreliable, only for the lazy coder, ... should use "| exit 1", or "| my_error()" )
+# btw you may not trap in a trap in Bash programming
+
+# Variable types may be used if desired, such as:
+readonly
+local
+
+# Bash built ins:
+shift #to shift parameters, such as input arguments to the left
+[] #is the same as test and [[ ]] is a Bash specific "upgrade". These are often used in if statements
+
+# Split string
+read #set $IFS to desired separator (default value is <space><tab><newline>)
+#And we may split one input string into multiple variables, for instance
