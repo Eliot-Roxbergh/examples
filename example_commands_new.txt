@@ -16,12 +16,7 @@ bind -p
 #In Bash and other programs (e.g. Git)
 # use -- to show that this is the end of commands and next is only user input
 # For instance, `cat -- -v` will show the file called "-v" instead of the command -v
- 
-# Bash programming `set -e` and `set -u` might be useful
-# e.g. #!/bin/bash -eu
-# -u error on unset variable
-# -e exit on error (very unreliable, only for the lazy coder, ... should use "| exit 1", or "| my_error()" )
-# btw you may not trap in a trap in Bash programming
+
 
 
 ###### UNIX stuff ######
