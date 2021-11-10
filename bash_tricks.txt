@@ -1,3 +1,5 @@
+# Some bash stuff that can be useful in scripting, but don't be afraid to read man page (man 1 bash)
+
 # set -e` and `set -u` might be useful (same as #!/bin/bash -eu)
 # -u error on unset variable
 # -e exit on error (very unreliable, only for the lazy coder, ... should use "| exit 1", or "| my_error()" )
@@ -7,9 +9,44 @@
 readonly
 local
 
-# Bash built ins:
+# Basic stuff:
+$(cmd) #command substition (or deprecated: `cmd`)
+${var} #or $var, variable substition
+cmd    # run command directly (error code may be read afterward with $? )
+
+# Special Parameters (as per `man 1 bash`)
+$0 # Program name
+$1 # $1 $2 ... input arguments
+$@ # All input arguments to function ( "$@" = "$1 $2 $3 .." )
+$* # Same as $@ but parse with IFS so "$*" should be seperated something like "$1" "$2" "$3" ?
+$? # Last error code (note only call once directly after a command have executed, usually save to variable like: rv=$? )
+      #(or more specifically "most recent foreground pipeline exit status")
+$$ # Current process' PID
+
+# Some nice built-ins
 shift #to shift parameters, such as input arguments to the left
-[] #is the same as test and [[ ]] is a Bash specific "upgrade". These are often used in if statements
+[] #is the same as test and [[ ]] is a Bash specific "upgrade" which may be used. You'll often see these in if statements.
+
+# Multi-line variable with <<
+  << YOU_DELIMITER_HERE # to directly set multi-line variable, usually EOF or DELIM is used
+  cat << "DELIM blalba
+          multiple lines
+          here
+          DELIM"
+  #end at DELIM (whatever you use instead of "DELIM" as delimiter"
+
+# here-string ( <<< ), use local variable as STDIN for command
+  grep "find me" <<<$text_to_search #find string stored in variable
+  #compare with:
+  #grep "find me" $text_to_search #will not search the variable, but rather interpret it as files to search in
+#another example:
+  var="a b c d"; cat <<< "$var"
+  #same as:
+  echo "a b c d" | cat
+# and:
+  cat <<< "$@" 1>&2;
+  # $@ are all positonal arguments (our script received from user)
+  # redirect STDOUT (1) to STDERR(2)
 
 # Split string
 read #set $IFS to desired separator (default value is <space><tab><newline>)
