@@ -12,23 +12,24 @@ bind -p
 #Move one word forward: alt+f  (ctrl+f = move one character instead)
 #Start of line: <HOME> or ctrl+a
 #End of line:   <END>  or ctrl+e
+#Backward search: ctrl+r
+#Forward search:  ctrl+s #can change direction after using ctrl+r, enable with stty -ixon
 
 #In Bash and other programs (e.g. Git)
 # use -- to show that this is the end of commands and next is only user input
 # For instance, `cat -- -v` will show the file called "-v" instead of the command -v
 
 
-
 ###### UNIX stuff ######
 
-#   (see manpage for command for powerful options)
+#   (see manpage for powerful options to these commands)
 basename #/a/b/bin.c -> bin.c
 dirname  #/a/b/bin.c -> /a/b
 
 # "For each NAME, indicate how it would be interpreted if used as a command name "
 # e.g. type vim -> vim is /usr/bin/vim,
 #   or type ls -> ls is aliased to `ls --color=auto'
-type <command>
+type <command> //see `type --help`
 
 
 ###### Git ######
@@ -41,12 +42,9 @@ git log --stat #see files changed
 git push origin --delete <branch>
 
 
-###### GDB ######
-
-TODO
-
-
 ###### More ######
+
+grep -Hn <my_pattern> <files> #print filenames and line numbers
 
 #extract archive to a folder based on archive name, here "MY_STUFF/"
 tar xvf MY_STUFF.tar.gz --one-top-level 
