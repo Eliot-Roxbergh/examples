@@ -15,6 +15,10 @@ gdb --tui my-file #split screen with source code (same as "ctrl+x a")
 br my_func
 br my_file.c:123
 del //delete all breakpoints
+clear [<location>] //delete breakpoint in current location,
+                   // but if argument is supplied, delete at that line nr if possible, otherwise then try to delete that breakpoint ID instead.
+                   // (e.g. `clear 2` would first try to delete breakpoint on line 2 and if not possible try to delete breakpoint number 2 instead.)
+enable / disable // enable or disable one, multiple, or all breakpoints
 
 shell [<cmd>]
 
