@@ -26,12 +26,13 @@ run // start and run program
 start //start but don't run directly
 continue
 
-step // or use "next" to avoid stepping into function)
-finish //stop after return from current function
-print *my_struct //print struct data
-display *my_struct //same as print but persistent (show every time it changes!)
-where //same as "bt"
+s // step or use "n" (next) to avoid stepping into function)
+fin //finish, return from current function
+p my_var //print struct data, e.g. may use p/x my_var to print in hex format or p *my_var to dereference a pointer,
+display *my_struct //same as print but persistent (shows every time it changes!)
+bt //same as "where"
 list //show code around current line
+q //quit
 
 info //a lot can be printed with info
 info registers
