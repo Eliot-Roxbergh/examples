@@ -26,7 +26,7 @@ run // start and run program
 start //start but don't run directly
 continue
 
-s // step or use "n" (next) to avoid stepping into function)
+s // (step) or use "n" (next) to avoid stepping into function
 fin //finish, return from current function
 p my_var //print struct data, e.g. may use p/x my_var to print in hex format or p *my_var to dereference a pointer,
 display *my_struct //same as print but persistent (shows every time it changes!)
