@@ -9,12 +9,9 @@
 /*
  * Define no debug to enable asserts.
  * The asserts add some checks for programming errors
- *  that should not depend on user input, for debugging only.
+ *  that should not depend on user input, for testing only.
  */
-//#define NDEBUG
-#ifdef NDEBUG
-#  define assert(condition) ((void)0)
-#endif
+//#define NDEBUG //uncomment this line to disable asserts
 #include <assert.h>
 
 
