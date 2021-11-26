@@ -17,18 +17,24 @@
 #endif
 #include <assert.h>
 
-/* for internal function iterate_over_all_children */
-enum iterate_action
+
+/* functions which applies an action to a cell and all children */
+static void all_delete(cell*);
+static void all_compute(cell*);
+static void all_invoke(cell*);
+
+/* helpers to these functions */
+enum iterate_order
 {
-    COMPUTE_VALUE,
-    INVOKE_CALLBACKS,
-    DELETE_ALL
+    FROM_FIRST_TO_LAST_CELL,
+    FROM_LAST_TO_FIRST_CELL
 };
 static bool compute_value(cell*);
 static bool invoke_callbacks(cell*);
-static bool delete_all(cell*);
-static void iterate_over_all_children(cell *c, enum iterate_action action, bool (*func)(cell*));
-/* rest of internal functions */
+static bool delete_cell(cell*);
+static void iterate_over_all_children(cell*, enum iterate_order, bool (*func)(cell*));
+
+/* other internal functions */
 static void destroy_cell_callbacks(cell *c);
 static cell *compute_cell_add_child(cell *c, cell *child);
 
@@ -55,7 +61,7 @@ void destroy_reactor(reactor *r)
     cell *next_top_parent;
     while(top_parent) {
         next_top_parent = top_parent->next_parent;
-        iterate_over_all_children(top_parent, DELETE_ALL, delete_all);
+        all_delete(top_parent);
         top_parent = next_top_parent;
     }
     //free reactor
@@ -156,11 +162,11 @@ void set_cell_value(cell *c, int new_value)
     c->new_value = new_value;
 
     //compute 'new_value' and propagate change
-    iterate_over_all_children(c, COMPUTE_VALUE, compute_value);
+    all_compute(c);
 
     //only once all values (new_value) have been propagated, we finalize by;
     //  invoke callbacks and write 'new_value' to 'value'
-    iterate_over_all_children(c, INVOKE_CALLBACKS, invoke_callbacks);
+    all_invoke(c);
 }
 
 //note: one cell can have multiple callbacks
@@ -309,13 +315,34 @@ static cell *compute_cell_add_child(cell *c, cell *child)
     return child;
 }
 
+
+/* Functions to perform on a cell and ALL its children;
+ * all_delete  - completely delete cell and all its children, also delete any reference to cell from its parents
+ * all_compute - recalculate compute cells
+ * all_invoke  - invoke callbacks on cells which have received a new value since last callback invokation
+ * */
+static void all_delete(cell *c)
+{
+    //for each branch of the tree
+    //  iterate all the way down and then free each cell upwards
+    iterate_over_all_children(c, FROM_LAST_TO_FIRST_CELL, delete_cell);
+}
+static void all_compute(cell *c)
+{
+    iterate_over_all_children(c, FROM_FIRST_TO_LAST_CELL, compute_value);
+}
+static void all_invoke(cell *c)
+{
+    iterate_over_all_children(c, FROM_FIRST_TO_LAST_CELL, invoke_callbacks);
+}
+
 /*
  * Perform supplied action on a cell, then go deeper (first a parent, then all its children, and then on the children's children, etc.)
  *  Both input cell and compute cell can be given as input (cell* c)
  *
  * Using depth-first search,
- *  we may either perform action then go deeper (parent then child),
- *  or go deeper then perform action which results in a kind of reverse order (child then parent)
+ *  we may either perform action then go deeper (FROM_FIRST_TO_LAST_CELL),
+ *  or go deeper then perform action which results in a kind of reverse order (FROM_LAST_TO_FIRST_CELL)
  *
  * (Comment: The "reverse order" is not globally reversed, but each subtree is taken in reversed order,
  *              e.g. the parent 0 with two children trees 123 45
@@ -323,7 +350,7 @@ static cell *compute_cell_add_child(cell *c, cell *child)
  *
  * Comment: recursion in C might blow the stack if we go too deep?
  */
-static void iterate_over_all_children(cell *c, enum iterate_action action, bool (*func)(cell*))
+static void iterate_over_all_children(cell *c, enum iterate_order order, bool (*func)(cell*))
 {
     bool is_finished = false;
     assert(func);
@@ -331,28 +358,28 @@ static void iterate_over_all_children(cell *c, enum iterate_action action, bool 
         return;
     }
 
-    //actions to perform from first to last cell
-    if (action == INVOKE_CALLBACKS || action == COMPUTE_VALUE) {
+    if (order == FROM_FIRST_TO_LAST_CELL) {
         is_finished = func(c);
         if (is_finished) {
+            //stop iterating if we are finised. (this is just an optimisation and not necessary,
+            //since the function should not do anything if called when it has nothing to do)
             return;
         }
     }
 
     //go deeper
     for (unsigned int i=0; c->children != NULL && i < c->nr_of_children; i++) {
-        iterate_over_all_children(c->children[i], action, func);
+        iterate_over_all_children(c->children[i], order, func);
     }
 
-    // actions to perform from last to first cell
-    if (action == DELETE_ALL) {
-        //so basically, we iterate all the way down and then free each cell upwards
-        func(c); //return value is unnecessary since we want to run this function for every cell
+    if (order == FROM_LAST_TO_FIRST_CELL) {
+        func(c); //return value is unnecessary (we can't and don't want to stop early)
     }
 }
 
 /* functions used in iterate_over_all_children, returns true when iteration should end */
 
+//returns true if calling the compute function did not change value
 static bool compute_value(cell *c)
 {
     if (c->compute1) {
@@ -369,6 +396,7 @@ static bool compute_value(cell *c)
     }
     return false;
 }
+//returns true if value hasn't changed since last time (and therefore callbacks are not invoked)
 static bool invoke_callbacks(cell *c)
 {
     if (c->value == c->new_value) {
@@ -390,12 +418,12 @@ static bool invoke_callbacks(cell *c)
     //set 'value' to signify that all callbacks have been called
     //  (calling this function again will thus not trigger callbacks)
     c->value = c->new_value;
-
     return false;
 }
 
-// delete everything on a single cell, and change its parent accordingly (modify cell->parent->children)
-static bool delete_all(cell *c)
+// delete everything on a single cell, and update its parent accordingly (modify cell->parent->children)
+// returns true if the cell has no parents, indicating that the whole tree should now be empty
+static bool delete_cell(cell *c)
 {
     bool parent_has_no_children;
     unsigned int nr_parents = 0; //here, c may have 0, 1, or 2 parents
@@ -432,10 +460,8 @@ static bool delete_all(cell *c)
     free(c);
 
     if (nr_parents == 0) {
-        //reached top-level, all parents and children should've been freed by now, we are done
         return true;
     } else {
-        //continue upwards
         return false;
     }
 }
