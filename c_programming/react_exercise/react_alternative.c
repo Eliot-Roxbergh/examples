@@ -14,12 +14,9 @@
 /*
  * Define no debug to enable asserts.
  * The asserts add some checks for programming errors
- *  that should not depend on user input, for debugging only.
+ *  that should not depend on user input, for testing only.
  */
-//#define NDEBUG
-#ifdef NDEBUG
-#  define assert(condition) ((void)0)
-#endif
+//#define NDEBUG //uncomment this line to disable asserts
 #include <assert.h>
 
 /* for internal function iterate_over_all_children */
@@ -389,7 +386,9 @@ static void iterate_over_all_children(cell *c, enum iterate_action action)
     }
 
     // actions to perform from last to first cell
-    if (action == DELETE_ALL) {
+    if (action != DELETE_ALL) {
+        return;
+    } else {
         //so basically, we iterate all the way down and then free each cell upwards
         bool parent_has_no_children;
         unsigned int nr_parents = 0; //here, c may have 0, 1, or 2 parents
