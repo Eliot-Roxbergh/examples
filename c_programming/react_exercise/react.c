@@ -4,7 +4,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <limits.h>
-#include <alloca.h>
 
 /*
  * Define no debug to enable asserts.

@@ -4,11 +4,11 @@
 #include <string.h>
 #include <stdio.h>
 #include <limits.h>
-#include <alloca.h>
 
 /*
  * Alternative version with another iterate_over_all_children()
- * Instead of the other function pointer implementation
+ * Instead of the other function pointer implementation,
+ *  not too exciting really :)
  */
 
 /*
