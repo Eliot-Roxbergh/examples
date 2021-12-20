@@ -1,7 +1,6 @@
 int read_ints (const char *, unsigned int*, int**);
 int read_str_int (const char *, unsigned int *, char ***, int **);
 int read_strs (const char *, unsigned int *, char ***);
-// int read_lines (const char *, unsigned int *, char ***);
 
 typedef struct {
     unsigned int nr_elems;

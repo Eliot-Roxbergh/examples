@@ -6,7 +6,6 @@
 #include <stdbool.h>
 
 
-
 int main() {
     unsigned int *input_string_status = NULL;
 
@@ -57,10 +56,9 @@ int main() {
         SCRUBBER,
         NONE
     };
-    input_string_status = calloc(1, sizeof(unsigned int)*hits);
+    input_string_status = calloc(hits, sizeof(unsigned int));
     unsigned int oxygen_strs_matching = hits;
     unsigned int scrubber_strs_matching = hits;
-    //bool scrubber_found = false, oxygen_found = false;
 
     uint16_t zeroes_oxygen = 0, ones_oxygen = 0;
     uint16_t zeroes_scrubber = 0, ones_scrubber = 0;
@@ -77,7 +75,7 @@ int main() {
             }
             //remove lines not matching previous runs result for oxygen and scrubber
             if (x > 0) {
-                //TODO well I guess this might fail since we don't check the last iteration this way (only x-1)
+                //TODO well I guess this might fail for certain input since we don't check the last iteration this way (only x-1)
                 actual_last_char = input_strs[y][x-1];
 
                 //line is ok first time, set line status
@@ -169,48 +167,3 @@ error:
     }
     return 0;
 }
-
-
-/* SOME TRASH WHICH I FAILED WITH / wrong assumptions*/
-
-        /*
-        //found most common bit for position x
-        if (ones > zeroes) {
-            oxygen_str[x] = '1';
-            scrubber_str[x] = '0';
-        } else if (zeroes > ones) {
-            oxygen_str[x] = '0';
-            scrubber_str[x] = '1';
-        } else {
-            oxygen_str[x] = '1';
-            scrubber_str[x] = '0';
-        }
-        */
-   // snprintf(scrubber_str, 13, "%d", scrubber_rating);
-   // snprintf(oxygen_str, 13, "%d", oxygen_rating);
-
-    //the actual rating values are the closest match from our input
-    /*
-    for (size_t x=0; x < width; x++) {
-        if (scrubber_found && oxygen_found) break;
-
-        //find longest match from input
-        for (uint16_t y=0; y<hits ;y++) {
-            if (!oxygen_found && strncmp(oxygen_str, input_strs[y], 12-x) == 0) {
-                oxygen_found = true;
-                printf("best match to %s (%lu) was ", oxygen_str, 12-x);
-                strncpy(oxygen_str, input_strs[y], 13);
-                printf("%s\n",oxygen_str);
-            }
-            if (!scrubber_found && strncmp(scrubber_str, input_strs[y], 12-x) == 0) {
-                scrubber_found = true;
-                printf("best match to %s (%lu) was ", scrubber_str, 12-x);
-                strncpy(scrubber_str, input_strs[y], 13);
-                printf("%s\n",scrubber_str);
-            }
-        }
-    }
-    if (!scrubber_found || !oxygen_found) {
-        goto error;
-    }
-    */

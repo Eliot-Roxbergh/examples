@@ -78,11 +78,12 @@ static bool number_is_drawn(int number, int *draws, unsigned int draw_count) {
 //get score for a board which got bingo.
 static int get_score(board *board, int *draws, unsigned int draw_count)
 {
+    //assert(board->got_bingo);
     printf("\nThis board got bingo at round %d\n", draw_count);
     bool exclude_number;
     int number;
 
-    // for each number check if in excluded numbers list
+    //add number to score only if it's not drawn (i.e. not in excluded numbers list)
     int sum_of_unmarked_numbers = 0;
     for (unsigned int y=0;y<5;y++) {
         printf("  ");
@@ -167,6 +168,8 @@ int main() {
                 board->got_bingo = true;
                 board->score = get_score(board, drawn_numbers, draws);
                 board->draws_to_win = draws;
+                //TODO should also check that winner (on same draw) has more points than prev winner?
+                //      (winner->draws_to_win == draws && board->score > winner->score)
                 if (!winner || winner->draws_to_win == draws) {
                     winner = board;
                 }

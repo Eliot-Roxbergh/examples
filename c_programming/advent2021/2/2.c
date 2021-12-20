@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
 int main() {
     unsigned int hits;
     int *input_ints;
