@@ -1,6 +1,4 @@
 #!/bin/bash -eu
-set -o nounset
-
 # ../ugly_build.sh 4.c  ../read_input.c
 
 target="$@" #allow multiple source files
