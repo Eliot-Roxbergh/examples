@@ -7,6 +7,7 @@ Elliptic Curve Cryptography (ECC) can be used in favor of RSA (e.g. in TLS and B
 
 Unlike RSA, ECC is not used for encryption, only for signing (and therefore also key exchange).
 Still, ECC is useful and e.g. we may use Elliptic Curve Diffie-Hellman (ECDH) for key-exchange in TLS 1.3 to agree on a session (symmetric) key - where encryption is made more efficiently anyway.
+<!---  (perfect forward secrecy is required in TLS 1.3) -->
 
 Neither ECC or RSA is "quantum safe". For quantum safe crypto see e.g. Lattice (<https://en.wikipedia.org/wiki/Lattice-based_cryptography>).
 
@@ -15,6 +16,11 @@ A benefit with using EC keys, is that they are much shorter than RSA while maint
 Edwards curves is a special type of EC, which is growing in popularity (e.g. in TLS 1.3).
 
 ## ECC Signing (simplified)
+
+<!--- TODO clarify what is the point of this article? (... not too wordy just wanted a quick reference to get i) the intuition and ii) shortly how it's done in practice. IDK, this was just some note to self stuff really, might need rewrite in that case or just publish with clarifications -->
+<!--- TODO "what is a curve and which one should I pick?" "I heard NSA backdoored all curves"-->
+<!--- TODO "why EC? Are there more benefits over RSA?" (simpler padding, different operations are faster/slower) -->
+<!--- TODO blabla EC was introduced in TLS X.X and supported from OpenSSL X.X XXXX (like 1.1.0 2016 or something?)) -->
 
 ### Intuition (simplified, might be wrong on the details)
 
