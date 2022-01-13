@@ -1,5 +1,7 @@
-# Examples on using Linux terminal, and more
+# Guides and Examples
 
-Some examples for reference (e.g. awk, sed, bash).
+Some of my informal guides and examples.
+Includes, programming (e.g. C, Bash) and Linux stuff (simple automation, usage, ..), and related topics.
 
 Playing around, feel free to give pointers. 🕵️
+
