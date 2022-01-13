@@ -3,16 +3,16 @@ Here is a quick summary for elliptic curve cryptography with emphasis on Edwards
 
 # Elliptic Curve Cryptography (ECC)
 
-The ECC is commonly used in TLS and Bitcoin, etc. ... in favor of RSA. So called public-key (i.e. asymmetric) cryptography
+Elliptic Curve Cryptography (ECC) can be used in favor of RSA (e.g. in TLS and Bitcoin). Elliptic Curves (EC) and RSA are types of public-key (i.e. asymmetric) cryptography.
 
-Unlike RSA, ECC is not used for encryption, only for signing (and key exchange).
-Still, ECC is useful and e.g. we may use Elliptic Curve Diffie-Hellman (ECDH) for key-exchange (with ephemeral keys) in TLS 1.3 to agree on a session (symmetric) key.
+Unlike RSA, ECC is not used for encryption, only for signing (and therefore also key exchange).
+Still, ECC is useful and e.g. we may use Elliptic Curve Diffie-Hellman (ECDH) for key-exchange in TLS 1.3 to agree on a session (symmetric) key - where encryption is made more efficiently anyway.
 
-Neither ECC or RSA is quantum safe. For quantum safe crypto see other algorithms such as LATTICE.
+Neither ECC or RSA is "quantum safe". For quantum safe crypto see e.g. Lattice (<https://en.wikipedia.org/wiki/Lattice-based_cryptography>).
 
-EC keys are much shorter than RSA, while maintaining the same or better security (see "security bits").
+A benefit with using EC keys, is that they are much shorter than RSA while maintaining the same or better security (see "security bits").
 
-Edwards curves is a type of EC.
+Edwards curves is a special type of EC, which is growing in popularity (e.g. in TLS 1.3).
 
 ## ECC Signing (simplified)
 
@@ -42,7 +42,7 @@ Of course, a bruteforce approach would be possible, where addition is performed 
 
 ......
 
-### How to Make an EC Signature (simplified)
+### How to Make an EC Signature (short summary)
 
 Publically known: we have a curve E, a point on this curve G, an a large prime number q used for modulus).
 The signature (s,r) is of course sent and readable by anyone, who may (by using the public key) verify it
