@@ -1,0 +1,45 @@
+# cscope is similar to ctags but comes with vim
+# This is very useful so we can instantly jump to function definitions etc.
+
+
+# Build database file, e.g.
+cscope -b -q -R -I ~/projects #(search local dir recursively for source files)
+# OR
+find ~/projects/ -name '*.c' -o -name '*.h' > ~/projects/cscope.files #(-o means or)
+cscope -b -q -i ~/projects/cscope.files
+
+# db location can be set from bash
+export CSCOPE_DB=~/projects/cscope.out
+# or from vim, e.g.
+cs add ~/projects/cscope.out
+
+# Good to go
+#   ..remember to rebuild the database when appropriate
+#   ..it only includes the files you specify and '/usr/include/'!
+#        it does not check header files etc., don't jump to wrong version...
+
+# Vim
+# These also suggest .vimrc changes
+# :h cscope-howtouse
+# :h cscope-suggestions
+
+# Bindings
+# "set cst" uses :cstag instead of :tag, this makes the command ctrl+] usable for this purpose instead.
+ctrl+]  # go to declaration (I just use ctrl+o to go back)
+
+
+
+# vim optional:
+:cs add database #directory with db, or the file itself
+# QUESTION
+:cs reset #this command automatically loads multiple previous cscope databases ... how to change? TODO!
+
+
+# Now you may use cscope (inside or outside vim), such as go to definition (ctrl+]) or specific searches
+:cs find g my_func
+
+
+# tmp ugly script for updating definitions
+#!/bin/bash -e
+find ~/projects/ -name '*.c' -o -name '*.h' > ~/projects/cscope.files
+cscope -b -q -i ~/projects/cscope.files

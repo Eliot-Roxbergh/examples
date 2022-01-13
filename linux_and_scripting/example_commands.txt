@@ -162,33 +162,8 @@
     exiftool -all= *.jpg #remove exif-data
 
 # C-programming:
-    #    memory leaks:
-        valgrind --leak-check=yes ./binary.so args
-        
-    # fuzzy:
-        AFL_SKIP_CPUFREQ=1 afl-fuzz -n -o out/ -i in/ ./a.out
+    See separate file
 
-    # compilation example:
-        gcc -Wall -g -o file.so file.c
-        gcc -Wall -g -shared -fPIC -o file.so file.c
-
-    # debugging: (compile with -g)
-        #    gdb:
-            # run function directly
-                # load file.so
-                # run main
-
-            # debug core dump, e g segmentation fault
-            gdb file.so core
-
-            # break line
-            #    break function
-            #    l              // list
-            #    p var     // print
-            #    c              // continue (to next breakpoint)
-            #    s             // step
-            #    bt             // backtrace
-            
 # Docker: 
     #shell in
     docker exec -it CONTAINER_ID bash

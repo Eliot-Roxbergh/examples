@@ -1,0 +1,17 @@
+# memory check
+    # note, Valgrind test suite has many more tests than just the default memcheck ("Valgrind")
+    #       https://valgrind.org/info/tools.html
+valgrind --leak-check=yes ./binary.so args
+
+# fuzzy testing
+AFL_SKIP_CPUFREQ=1 afl-fuzz -n -o out/ -i in/ ./a.out #(this is a very old example)
+
+# static code analysis
+Semgrep
+codeQL
+
+# Unit tests
+...
+
+# Code coverage
+...

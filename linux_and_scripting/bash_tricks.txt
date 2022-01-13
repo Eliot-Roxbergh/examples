@@ -1,5 +1,7 @@
 # Some bash stuff that can be useful in scripting, but don't be afraid to read man page (man 1 bash)
 
+By the way, use shellcheck to find bugs or bad habits in your Bash scripts (static analysis tool).
+
 # set -e` and `set -u` might be useful (same as #!/bin/bash -eu)
 # -u error on unset variable
 # -e exit on error (very unreliable, only for the lazy coder, ... should use "| exit 1", or "| my_error()" )

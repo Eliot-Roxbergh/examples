@@ -1,0 +1,3 @@
+# compilation example:
+gcc -Wall -g -o file.so file.c
+gcc -Wall -g -shared -fPIC -o file.so file.c
