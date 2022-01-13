@@ -1,0 +1,30 @@
+#!/bin/bash -eu
+# Some general examples for AWK
+# For instance, how to make an OR-statement or how to write result to different files depending on the input.
+
+##### 1: OR-statement #####
+# TODO We can probably do this more specific to avoid repetiton in the command?
+#       -> see also '|' and '?' characters and how this can be used to a similar end ?
+#          e.g. https://stackoverflow.com/questions/15986187/or-condition-in-regex
+#
+#OR statement, do the SAME action if the last on line is a number, exactly 1 or 2 digits long
+#   (May use && instead for AND)
+awk '/.* [0-9]{1}$/ || /.* [0-9]{2}$/ {print}' < file
+# Otherwise we can of course do different things in the same manner, something like..
+awk '/.* [0-9]{1}$/{print $4} /.* [0-9]{2}$/ {print}' < file
+
+
+##### 2: Write to different files #####
+# Use variable in awk to change which file to write to.
+# TODO: This can be quite slow due to all IO
+#        -> can we add this to a list and only write in the end or something?
+#
+# First: (one time) create/overwrite empty file "first.txt"
+#   add all lines with only digits here
+# If we see the text "REQUEST_NEW_FILE", we instead create/overwrite empty file "second.txt"
+#   (this file will be emptied if this text is found on multiple lines in the input file)
+#   now all lines with only digits go here instead from now on
+awk 'BEGIN{output_file="first.txt"; print "" > output_file}
+     /^[0-9]$/     {print >> output_file}
+     /.*REQUEST_NEW_FILE.*/ {output_file="second.txt"; print > output_file}
+     ' < input_file
