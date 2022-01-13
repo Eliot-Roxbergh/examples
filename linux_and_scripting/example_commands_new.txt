@@ -8,12 +8,16 @@
 bind -p 
 
 # Basic, default, Bash bindings to enjoy
+#   (List bindings with stty -a)
 #Move one word back:    alt+b  (ctrl+b = move one character instead)
 #Move one word forward: alt+f  (ctrl+f = move one character instead)
 #Start of line: <HOME> or ctrl+a
 #End of line:   <END>  or ctrl+e
 #Backward search: ctrl+r
 #Forward search:  ctrl+s #can change direction after using ctrl+r, enable with stty -ixon
+#Delete previous word: ctrl+w
+#Delete all to left: ctrl+u
+#Delete whole line: ctrl+?
 
 #In Bash and other programs (e.g. Git)
 # use -- to show that this is the end of commands and next is only user input
