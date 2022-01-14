@@ -1,5 +1,9 @@
-Dynamic linking:
-Use ldd (NOTE: this might in some cases execute the binary itself)
+# Dynamic linking
+
+$ ldconfig -N -v -p | less
+Print all libraries found on system, with full path (remove -N to also rebuild cache)
+
+Use ldd to show shared libraries used for program or library (NOTE: this might in some cases execute the binary itself)
 
 ldd is recursive and can therefore give different results on different machines.
 To avoid this you may use objdump or readelf (objdump -p ?)
@@ -18,6 +22,7 @@ $ lsof -p 6919|grep mem
 Read the man page for dynamic linker for details of where libraries are looked for.
 (e.g order of precedence: rpath > LD_LIBRARY_PATH > runpath) [1]
 $ man 8 ld.so
+(run ldconfig -p to rebuild the cache)
 
 nm - list symbols from object files
 $ nm static_shared
