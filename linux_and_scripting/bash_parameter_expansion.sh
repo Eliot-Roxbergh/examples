@@ -1,5 +1,7 @@
 #!/bin/bash -eu
 # See Bash manual, shell parameter expansion, for more info
+# Guide here https://wiki.bash-hackers.org/syntax/pe
+#   See also POSIX bracket expressions (https://www.regular-expressions.info/posixbrackets.html)
 
 MY_PATH=/a/b/foo.x.y
 echo "${MY_PATH#*/}"  # -> a/b/foo.x.y
