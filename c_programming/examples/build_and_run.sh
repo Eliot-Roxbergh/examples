@@ -1,6 +1,6 @@
 #!/bin/bash -eu
-#Quick script to build and run a C project with some useful flags
-# Note -g shouldn't be used in production etc. etc. :)
+#Quick script to build and run a C project with some useful debug flags
+#Just a quick one, but just use cmake instead
 
 target="$@" #allow multiple source files (from arguments) #shellcheck complains on this line: https://github.com/koalaman/shellcheck/wiki/SC2124
 
