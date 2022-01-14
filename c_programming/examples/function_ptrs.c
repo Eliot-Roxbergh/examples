@@ -33,8 +33,9 @@ static init_t init[] =
 
 };
 
-void main(){
+int main(){
     int a = init[READ](5); //call first function in array with argument 5
     int b = init[WRITE](10); //call second function in array with argument 10
     printf("%d %d\n",a,b);
+    return 0;
 }

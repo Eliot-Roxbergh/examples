@@ -29,6 +29,8 @@ struct test {
 void init_test(struct test* obj_ptr){
    struct test new_obj = *obj_ptr; // only copies value, useless if we don't return it somehow
    new_obj.a = 1;
+
+   (void) new_obj; //compiler know the problem... above lines will otherwise result in warning (-Werror=unused-but-set-variable)
 }
 
 /* Just sets a field in the given memory address.
