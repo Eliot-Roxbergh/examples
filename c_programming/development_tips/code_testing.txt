@@ -1,17 +1,28 @@
-# memory check
+# Tools for C 
+
+# Memory Check
     # note, Valgrind test suite has many more tests than just the default memcheck ("Valgrind")
     #       https://valgrind.org/info/tools.html
 valgrind --leak-check=yes ./binary.so args
 
-# fuzzy testing
-AFL_SKIP_CPUFREQ=1 afl-fuzz -n -o out/ -i in/ ./a.out #(this is a very old example)
+# Fuzzy Testing
+AFL++
 
-# static code analysis
+# Static Code Analysis
 Semgrep
 codeQL
 
-# Unit tests
-...
+# Unit Tests
+Google Test
+Criterion
+Check
+(there are many https://en.wikipedia.org/wiki/List_of_unit_testing_frameworks#C)
 
-# Code coverage
-...
+# Code Coverage
+gcov & lcov
+(there are many commercial products)
+
+# Mocking
+gmock (Google Test)
+cmocka
+(can ofc also mock a function manually by using #defines or look at the dynamic linking)
