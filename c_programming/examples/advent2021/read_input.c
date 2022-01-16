@@ -7,6 +7,7 @@
  *      read_ints_per_line
  *  is the most recent and useful to read ints from file.
  */
+// TODO seg faults if file does not exist?
 
 /*
  * Read ints split by line
