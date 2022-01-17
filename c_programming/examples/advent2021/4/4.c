@@ -12,7 +12,7 @@ typedef struct {
     int score;
     bool got_bingo; //req. for part 2
 } board;
-static bool number_is_drawn(int, int *, unsigned int);
+static bool number_is_drawn(int, const int *, unsigned int);
 static bool check_bingo_rows(board *, int *, unsigned int);
 static bool check_bingo_cols(board *, int *, unsigned int);
 static int  get_score(board *, int *, unsigned int);
@@ -66,7 +66,7 @@ static bool check_bingo_rows(board *board, int *draws, unsigned int draw_count)
 }
 
 //check if number is in given list
-static bool number_is_drawn(int number, int *draws, unsigned int draw_count) {
+static bool number_is_drawn(int number, const int *draws, unsigned int draw_count) {
     for (unsigned int i=0; i < draw_count; i++) {
         if (number == draws[i]) {
             return true;
@@ -79,7 +79,7 @@ static bool number_is_drawn(int number, int *draws, unsigned int draw_count) {
 static int get_score(board *board, int *draws, unsigned int draw_count)
 {
     //assert(board->got_bingo);
-    printf("\nThis board got bingo at round %d\n", draw_count);
+    printf("\nThis board got bingo at round %u\n", draw_count);
     bool exclude_number;
     int number;
 
@@ -103,6 +103,7 @@ static int get_score(board *board, int *draws, unsigned int draw_count)
 
 
 int main() {
+    board* boards = NULL;
     unsigned int lines_in_raw_input;
     line_entry *input_ints;
     if (read_ints_per_line("input", &lines_in_raw_input, &input_ints) != 0) {
@@ -122,7 +123,7 @@ int main() {
     // Find and assign boards,
     //  a board is 5 consecutive rows with exactly 5 integers in each.
     unsigned int nr_of_boards = lines_in_raw_input / 5; //theoretical max nr of boards
-    board *boards = calloc(nr_of_boards,sizeof(board));
+    boards = calloc(nr_of_boards,sizeof(board));
     unsigned int rows_found = 1, nr_of_boards_found = 0;
     for (unsigned int cur_line=1; cur_line < lines_in_raw_input; cur_line++) {
         //invalid row, reset board
@@ -174,7 +175,7 @@ int main() {
                     winner = board;
                 }
                 last_winner_score = board->score; //part 2
-                printf("Board %d got bingo after %d draws, with a score of %d\n", board_nr+1, board->draws_to_win, board->score);
+                printf("Board %u got bingo after %u draws, with a score of %d\n", board_nr+1, board->draws_to_win, board->score);
             }
         }
         //if (winner) break; //for part 1 we can break here, and not check every draw

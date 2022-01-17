@@ -27,7 +27,7 @@ add_executable(4.out read_input.c 4/4.c)
 
 #NOTE! A bit messy... the binaries need to be placed in their own directory.
 #       This is accomplished by the below lines, but ONLY by the command: make install
-#   (TODO seems a bit messy)
+#   (TODO seems a bit messy / I'm doing something wrong here)
 install(TARGETS 1.out CONFIGURATIONS Debug RUNTIME DESTINATION 1/)
 install(TARGETS 2.out CONFIGURATIONS Debug RUNTIME DESTINATION 2/)
 install(TARGETS 3.out CONFIGURATIONS Debug RUNTIME DESTINATION 3/)

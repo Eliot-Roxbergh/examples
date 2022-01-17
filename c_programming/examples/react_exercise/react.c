@@ -208,8 +208,9 @@ void remove_callback(cell *c, callback_id id)
         fprintf(stderr, "Invalid input given\n");
         exit(1);
     }
-    if (!c->cb_st)
+    if (!c->cb_st) {
         return;
+    }
 
     //check first element in cb_st
     if (c->cb_st->id == id) {
@@ -285,7 +286,7 @@ static cell *compute_cell_add_child(cell *c, cell *child)
     assert(!(c->children && c->nr_of_children == 0)); //no children but ptr not NULL
 
     if (c->nr_of_children == UINT_MAX) {
-        fprintf(stderr, "Sorry! Parent is full and has already %d children\n", c->nr_of_children);
+        fprintf(stderr, "Sorry! Parent is full and has already %u children\n", c->nr_of_children);
         return NULL;
     }
 
@@ -457,7 +458,6 @@ static bool delete_cell(cell *c)
 
     if (nr_parents == 0) {
         return true;
-    } else {
-        return false;
     }
+    return false;
 }

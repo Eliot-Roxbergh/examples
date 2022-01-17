@@ -8,6 +8,16 @@
  *  is the most recent and useful to read ints from file.
  */
 // TODO seg faults if file does not exist?
+/* TODO cppcheck and clang-tidy says:
+ * warning: use 'fopen' mode 'e' to set O_CLOEXEC [android-cloexec-fopen]
+ *  FILE *file = fopen(file_name,"r");
+ *                               ^~~~
+ *                               "re"
+ *
+ * warning: 'fscanf' used to convert a string to an integer value, but function will not report conversion errors; consider using 'strtol' instead [cert-err34-c]
+ * warning: fscanf() without field width limits can crash with huge input data.
+ * warning: header is missing header guard [llvm-header-guard]
+ */
 
 /*
  * Read ints split by line
@@ -122,10 +132,9 @@ int read_ints (const char *file_name, unsigned int *entries, int **output)
 {
     FILE *file = fopen(file_name,"r");
     unsigned int hits = 0;
-    int *nums;
+    int *nums = NULL;
 
     if (!file) {
-        nums = NULL;
         goto error;
     }
 
@@ -141,7 +150,7 @@ int read_ints (const char *file_name, unsigned int *entries, int **output)
         }
     }
 
-    nums = malloc(sizeof(unsigned int)*hits);
+    nums = malloc(sizeof(*nums)*hits);
     if (!nums || hits == 0) {
         goto error;
     }
@@ -205,8 +214,8 @@ int read_str_int (const char *file_name, unsigned int *entries, char ***out_strs
         goto error;
     }
 
-    nums = malloc(sizeof(unsigned int)*lines);
-    strs = malloc(sizeof(char*)*lines);
+    nums = malloc(sizeof(*nums)*lines);
+    strs = malloc(sizeof(*strs)*lines);
     for (unsigned int i=0; i<lines; i++) {
         strs[i] = malloc(sizeof(char)*11);
     }
@@ -285,9 +294,9 @@ int read_strs (const char *file_name, unsigned int *entries, char ***out_strs)
         goto error;
     }
 
-    strs = malloc(sizeof(char*)*lines);
+    strs = malloc(sizeof(*strs)*lines);
     for (unsigned int i=0; i<lines; i++) {
-        strs[i] = malloc(sizeof(char)*21);
+        strs[i] = malloc(sizeof(**strs)*21);
     }
 
     rewind(file);

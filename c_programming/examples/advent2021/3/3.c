@@ -32,6 +32,7 @@ int main() {
     //epsilon rate follows the same logic, but looking for '0' instead,
     //  since a value may only be one or zero, we simply bit invert gamma rate to get epsilon rate.
     //NOTE: if a column has the same number of '1' and '0', the result is undefined
+    //TODO: we get a few warnings "warning: use of a signed integer operand with a binary bitwise operator [hicpp-signed-bitwise]" ( >> ^ << )
     for (uint16_t x=0; x < width; x++) {
         ones_found_in_column = 0;
         for (uint16_t y=0; y<hits; y++) {

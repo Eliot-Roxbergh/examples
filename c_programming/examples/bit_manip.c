@@ -6,19 +6,20 @@
  *  - why does shift (<<) and bit inverse (~) return int?
  *      Is it also not more reasonable to use unsigned char
  *      for bit manipulation anyway?
+ *      https://stackoverflow.com/a/58845898 mentions that "Do not use bitwise operators with signed operands"
  *  - Werror=conversion, seems quite odd? See examples below.
  */
 int main()
 {
     unsigned char bits = 5;
     unsigned char bits_inverse = 0;
-    bits_inverse = (unsigned char) ~bits;             //OK
-    bits_inverse = ((unsigned int) ~bits) & (0xFF-1); //OK
-    bits_inverse = ~bits & 0xF ;                      //OK
+    bits_inverse = (unsigned char) ~bits;             //compiles OK!
+    bits_inverse = ((unsigned int) ~bits) & (0xFF-1); //gcc says OK (but clang-tidy says [hicpp-signed-bitwise])
+    bits_inverse = ~bits & 0xF ;                      //gcc says OK (but clang-tidy says [hicpp-signed-bitwise])
 
     // BUT!
-    //bits_inverse = ~bits;             //NOT OK -Werror=conversion
-    //bits_inverse = ~bits & (0xFF-1);  //NOT OK -Werror=conversion
+    //bits_inverse = ~bits;             //gcc says error: -Werror=conversion
+    //bits_inverse = ~bits & (0xFF-1);  //gcc says error: -Werror=conversion
     printf("%u\n", bits_inverse);
 
 

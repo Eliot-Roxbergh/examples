@@ -18,7 +18,7 @@ int main() {
             count++;
         }
     }
-    printf("%d measurements were larger than previous measurement\n", count);
+    printf("%u measurements were larger than previous measurement\n", count);
 
     //part2
     count = 0;
@@ -32,7 +32,7 @@ int main() {
         }
         prev_sum = cur_sum;
     }
-    printf("%d sums are larger than previous sum\n", count);
+    printf("%u sums are larger than previous sum\n", count);
 
     free(input);
     return 0;
