@@ -1,16 +1,17 @@
 # Tools for C 
 
-# Memory Check
-    note, Valgrind test suite has many more tests than just the default memcheck ("Valgrind")
-          https://valgrind.org/info/tools.html
+## Dynamic Program Analysis
+### Memory Check and More
+
 valgrind --leak-check=yes ./binary.so args
 
+Valgrind test suite has many more tests than just the default memcheck ("Valgrind"), see https://valgrind.org/info/tools.html
 
-# Fuzzy Testing
+### Fuzzy Testing
 AFL++
 
 
-# Static Code Analysis
+## Static Code Analysis
 Semgrep
 
 codeQL (proprietary)
@@ -20,7 +21,7 @@ codeQL (proprietary)
 clang-tidy cppcheck iwyu lwyu cpplint
 
 
-# Unit Tests
+## Unit Tests
 
 Google Test
 
@@ -32,13 +33,13 @@ Check
 
 For CMake see also CTest, and CDash (e.g. to be used in conjunction with Google Test)
 
-# Code Coverage
+## Code Coverage
 
 gcov & lcov (included in GCC)
 
 (there are many commercial products..)
 
-# Mocking
+## Mocking
 
 gmock (Google Test)
 
