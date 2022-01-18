@@ -20,6 +20,9 @@ codeQL (proprietary)
 
 clang-tidy cppcheck iwyu lwyu cpplint
 
+An alternative is CodeChecker (front-end to clang static analysis tools)
+
+>CodeChecker check --build "make clean; cmake . && cmake --build ."  --output ./reports --clean --enable sensitive 
 
 ## Unit Tests
 
