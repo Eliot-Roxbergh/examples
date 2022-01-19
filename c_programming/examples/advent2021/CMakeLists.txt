@@ -27,12 +27,12 @@ add_executable(2.out read_input.c 2/2.c)
 add_executable(3.out read_input.c 3/3.c)
 add_executable(4.out read_input.c 4/4.c)
 
-#NOTE! A bit messy... the binaries need to be placed in their own directory.
-#       This is accomplished by the below lines, but ONLY by the command: make install
-#   (TODO seems a bit messy / I'm doing something wrong here)
-install(TARGETS 1.out CONFIGURATIONS Debug RUNTIME DESTINATION 1/)
-install(TARGETS 2.out CONFIGURATIONS Debug RUNTIME DESTINATION 2/)
-install(TARGETS 3.out CONFIGURATIONS Debug RUNTIME DESTINATION 3/)
-install(TARGETS 4.out CONFIGURATIONS Debug RUNTIME DESTINATION 4/)
+#NOTE! A bit messy... the binaries need to be placed in their own directory as setup now
+#       This is accomplished by the below lines and the command: make install (cmake --build does not "install")
+#   (TODO how to do this with cmake instead of make install?)
+install(TARGETS 1.out RUNTIME DESTINATION ${CMAKE_CURRENT_LIST_DIR}/1/)
+install(TARGETS 2.out RUNTIME DESTINATION ${CMAKE_CURRENT_LIST_DIR}/2/)
+install(TARGETS 3.out RUNTIME DESTINATION ${CMAKE_CURRENT_LIST_DIR}/3/)
+install(TARGETS 4.out RUNTIME DESTINATION ${CMAKE_CURRENT_LIST_DIR}/4/)
 
 include_directories(.)

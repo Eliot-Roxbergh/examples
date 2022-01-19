@@ -55,7 +55,7 @@ add_executable(ptrs          ptrs.c)
 add_executable(ptrs2         ptrs2.c)
 
 #Also build these projects
-#add_subdirectory(advent2021)
-#add_subdirectory(react_exercise)
+add_subdirectory(advent2021)
+add_subdirectory(react_exercise)
 
 
