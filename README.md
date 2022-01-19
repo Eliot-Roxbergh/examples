@@ -17,3 +17,4 @@ For every commit, as well as once per week, a few analysis tools are ran:
 
 **codeql** (see https://semgrep.dev/orgs/eliot-roxbergh/findings)
 
+TODO yes these code warnings get lost and the tests does not necessarily fail, need to manually check as is now.
