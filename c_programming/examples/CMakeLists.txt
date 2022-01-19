@@ -1,20 +1,27 @@
 #simple example to build this: cmake --clean-first . && cmake --build .
-
 set(C_STD c11)
 
-#enable static analysis with -DCLANG_TESTS=true
-if (CLANG_TESTS)
-    # It is easy to automatically include additional testing with cmake.
-    # Below I include some static code analysis checks which are run at build time (cmake --build .).
-    #   My inspiration: https://www.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/
-    #                   (https://www.youtube.com/watch?v=rLopVhns4Zs&t=4633s)
-    #   Requires: sudo apt install clang clang-tidy cppcheck iwyu #(not included: cpplint clazy)
-    #   For C++ change _C_ to _CXX_
+#Enable static analysis with -DTEST_ALL=true
+#   Some inspiration:
+#       https://www.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/
+#       (https://www.youtube.com/watch?v=rLopVhns4Zs&t=4633s)
+#   Requires: sudo apt install clang clang-tidy cppcheck iwyu #(not included: cpplint clazy)
+#   For C++, remember to change _C_ to _CXX_
+if (TEST_ALL)
+    set(TEST_CLANG)
+    set(TEST_CPPCHECK)
+    set(TEST_IWYU)
+    #set(TEST_EXTRAS)
+endif()
+if (TEST_CLANG)
     set(CMAKE_C_CLANG_TIDY
         clang-tidy;
         -header-filter=.;
         -checks=*;
        )
+    set(CMAKE_LINK_WHAT_YOU_USE TRUE)
+endif()
+if (TEST_CPPCHECK)
     set(CMAKE_C_CPPCHECK
         cppcheck;
         --enable=warning;
@@ -23,22 +30,24 @@ if (CLANG_TESTS)
         --inline-suppr;
         --std=${C_STD};
         #"--suppressions-list=${CMAKE_SOURCE_DIR}/CppCheckSuppressions.txt";
-        )
+       )
+endif()
+if (TEST_IWYU)
     set(CMAKE_C_INCLUDE_WHAT_YOU_USE
         iwyu;
-        )
-    set(CMAKE_LINK_WHAT_YOU_USE TRUE)
-    ### Not tried: ###
-    ##Google style guide
-    #set(CMAKE_C_CPPLINT
-    #    cpplint;
-    #    --linelength=120;)
-    ##Somewhat C++/Qt specific
-    #set(CMAKE_CXX_COMPILER
-    #    clazy;
-    #)
-    ##################
+       )
 endif()
+#if (TEST_EXTRAS)
+#    ### Not tried: ###
+#    #Google style guide
+#    set(CMAKE_C_CPPLINT
+#        cpplint;
+#        --linelength=120;)
+#    #Somewhat C++/Qt specific
+#    set(CMAKE_CXX_COMPILER
+#        clazy;
+#    )
+#endif()
 
 cmake_minimum_required(VERSION 3.6)
 

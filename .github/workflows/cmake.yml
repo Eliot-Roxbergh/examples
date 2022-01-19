@@ -28,13 +28,23 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
-      run: |
-        cmake --build ${{env.SRC_PATH}}/build --config ${{env.BUILD_TYPE}}
-        #cd ${{env.SRC_PATH}}/advent2021; make install; cd ${{env.SRC_PATH}}
+      run: cmake --build ${{env.SRC_PATH}}/build --config ${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{env.SRC_PATH}}/build
       # Execute tests defined by the CMake configuration.
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C ${{env.BUILD_TYPE}}
+
+  code_analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure CMake
+      run: cmake -B ${{env.SRC_PATH}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_CLANG=true ${{env.SRC_PATH}}
+
+    - name: Build and run code tests
+      run: cmake --build ${{env.SRC_PATH}}/build --config ${{env.BUILD_TYPE}}
 
