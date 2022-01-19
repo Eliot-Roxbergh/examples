@@ -1,19 +1,21 @@
-set(CMAKE_C_CLANG_TIDY
-    clang-tidy;
-    -header-filter=.;
-    -checks=*;
-   )
-set(CMAKE_C_CPPCHECK
-    cppcheck;
-    --enable=warning;
-    --inconclusive;
-    --force;
-    --inline-suppr;
-    )
-set(CMAKE_C_INCLUDE_WHAT_YOU_USE
-    iwyu;
-    )
-set(CMAKE_LINK_WHAT_YOU_USE TRUE)
+if (CLANG_TESTS)
+    set(CMAKE_C_CLANG_TIDY
+        clang-tidy;
+        -header-filter=.;
+        -checks=*;
+       )
+    set(CMAKE_C_CPPCHECK
+        cppcheck;
+        --enable=warning;
+        --inconclusive;
+        --force;
+        --inline-suppr;
+        )
+    set(CMAKE_C_INCLUDE_WHAT_YOU_USE
+        iwyu;
+        )
+    set(CMAKE_LINK_WHAT_YOU_USE TRUE)
+endif()
 
 cmake_minimum_required(VERSION 3.6)
 
