@@ -19,6 +19,7 @@ if (TEST_CLANG)
         clang-tidy;
         -header-filter=.*;
         -checks=*;
+        -Wno-error=unknown-warning-option;
        )
     set(CMAKE_LINK_WHAT_YOU_USE TRUE)
 endif()
