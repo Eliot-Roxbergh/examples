@@ -38,7 +38,8 @@ jobs:
 
   code_analysis:
     runs-on: ubuntu-latest
-
+    continue-on-error: true
+    
     steps:
     - uses: actions/checkout@v2
 
