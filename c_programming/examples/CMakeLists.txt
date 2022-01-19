@@ -8,11 +8,12 @@ set(C_STD c11)
 #   Requires: sudo apt install clang clang-tidy cppcheck iwyu #(not included: cpplint clazy)
 #   For C++, remember to change _C_ to _CXX_
 if (TEST_ALL)
-    set(TEST_CLANG)
-    set(TEST_CPPCHECK)
-    set(TEST_IWYU)
-    #set(TEST_EXTRAS)
+    set(TEST_CLANG true)
+    set(TEST_CPPCHECK true)
+    set(TEST_IWYU true)
+    #set(TEST_EXTRAS true)
 endif()
+#
 if (TEST_CLANG)
     set(CMAKE_C_CLANG_TIDY
         clang-tidy;
