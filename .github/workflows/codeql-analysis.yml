@@ -11,14 +11,13 @@
 #
 name: "CodeQL"
 
+#Test: Run everytime cmake runs, does this mean I don't need to build here?
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ master ]
-  schedule:
-    - cron: '33 13 * * 6'
+  workflow_run:
+    workflows: ["CMake"]
+    branches: [master]
+    types:
+      - completed
 
 jobs:
   analyze:
@@ -52,8 +51,8 @@ jobs:
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
+    #- name: Autobuild
+    #  uses: github/codeql-action/autobuild@v1
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
