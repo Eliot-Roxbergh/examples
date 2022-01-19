@@ -41,9 +41,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+    - run: sudo apt-get update -yq
+
+    - run: sudo apt-get install -yq clang clang-tidy cppcheck iwyu
 
     - name: Configure CMake
-      run: cmake -B ${{env.SRC_PATH}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_CLANG=true ${{env.SRC_PATH}}
+      run: cmake -B ${{env.SRC_PATH}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST_ALL=true ${{env.SRC_PATH}}
 
     - name: Build and run code tests
       run: cmake --build ${{env.SRC_PATH}}/build --config ${{env.BUILD_TYPE}}
