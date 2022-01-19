@@ -66,10 +66,10 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
     - name: cmake-build
-    - run: |
+      run: |
         cmake -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} .
         cmake --build build --config ${{env.BUILD_TYPE}}
-    - working-directory: ${{env.SRC_PATH}}
+      working-directory: ${{env.SRC_PATH}}
 
 
     - name: Perform CodeQL Analysis
