@@ -11,9 +11,9 @@ Playing around, feel free to give pointers. 🕵️
 For c-programming/examples we have a small Github CI pipeline.
 For every commit, as well as once per week, a few analysis tools are ran:
 
-**cmake** (see _cmake/code-analysis_ output in https://github.com/Eliot-Roxbergh/examples/actions. This includes different open-source tools)
+**cmake** (see _cmake/code-analysis_ output in https://github.com/Eliot-Roxbergh/examples/actions/workflows/cmake.yml. This includes different open-source tools)
 
-**semgrep** (see https://github.com/Eliot-Roxbergh/examples/security)
+**semgrep** (see https://github.com/Eliot-Roxbergh/examples/security/code-scanning)
 
 **codeql** (see https://semgrep.dev/orgs/eliot-roxbergh/findings)
 
