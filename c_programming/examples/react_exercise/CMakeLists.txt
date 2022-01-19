@@ -1,21 +1,6 @@
-if (CLANG_TESTS)
-    set(CMAKE_C_CLANG_TIDY
-        clang-tidy;
-        -header-filter=.;
-        -checks=*;
-       )
-    set(CMAKE_C_CPPCHECK
-        cppcheck;
-        --enable=warning;
-        --inconclusive;
-        --force;
-        --inline-suppr;
-        )
-    set(CMAKE_C_INCLUDE_WHAT_YOU_USE
-        iwyu;
-        )
-    set(CMAKE_LINK_WHAT_YOU_USE TRUE)
-endif()
+#Building root dir (../) builds this project and runs code tests here as well.
+#   NOTE: so only building this project will not generate any code checks...
+#   TODO can we inherit tests from parent? So we don't need to run all tests every time.
 
 cmake_minimum_required(VERSION 3.6)
 

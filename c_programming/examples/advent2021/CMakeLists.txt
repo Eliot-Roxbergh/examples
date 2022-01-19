@@ -1,21 +1,6 @@
-if (CLANG_TESTS)
-    set(CMAKE_C_CLANG_TIDY
-        clang-tidy;
-        -header-filter=.;
-        -checks=*;
-       )
-    set(CMAKE_C_CPPCHECK
-        cppcheck;
-        --enable=warning;
-        --inconclusive;
-        --force;
-        --inline-suppr;
-        )
-    set(CMAKE_C_INCLUDE_WHAT_YOU_USE
-        iwyu;
-        )
-    set(CMAKE_LINK_WHAT_YOU_USE TRUE)
-endif()
+#Building root dir (../) builds this project and runs code tests here as well.
+#   NOTE: so only building this project will not generate any code checks...
+#   TODO can we inherit tests from parent? So we don't need to run all tests every time.
 
 cmake_minimum_required(VERSION 3.6)
 
@@ -29,7 +14,7 @@ add_executable(4.out read_input.c 4/4.c)
 
 #NOTE! A bit messy... the binaries need to be placed in their own directory as setup now
 #       This is accomplished by the below lines and the command: make install (cmake --build does not "install")
-#   (TODO how to do this with cmake instead of make install?)
+#   (TODO how to do this with cmake instead of needing 'make install'?)
 install(TARGETS 1.out RUNTIME DESTINATION ${CMAKE_CURRENT_LIST_DIR}/1/)
 install(TARGETS 2.out RUNTIME DESTINATION ${CMAKE_CURRENT_LIST_DIR}/2/)
 install(TARGETS 3.out RUNTIME DESTINATION ${CMAKE_CURRENT_LIST_DIR}/3/)
