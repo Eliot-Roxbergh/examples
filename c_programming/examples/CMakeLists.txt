@@ -17,7 +17,7 @@ endif()
 if (TEST_CLANG)
     set(CMAKE_C_CLANG_TIDY
         clang-tidy;
-        -header-filter=.;
+        -header-filter=.*;
         -checks=*;
        )
     set(CMAKE_LINK_WHAT_YOU_USE TRUE)
