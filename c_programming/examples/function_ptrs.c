@@ -19,7 +19,7 @@ int init_write(int a) { return a - 1; }
 // array of init_t, returns the approriate function pointer depending on data
 // type (enum)
 //... not to be confused, as this is just a regular array with each index
-//specified explictly according to C99 syntax
+// specified explictly according to C99 syntax
 static init_t init[] = {[READ] = init_read, [WRITE] = init_write
 
 };

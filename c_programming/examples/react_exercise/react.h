@@ -53,7 +53,7 @@ typedef struct cell {
     unsigned int nr_of_children;
     struct callback_st *cb_st;  // one cell may hold multiple callbacks
     int value;  //(old value is temporarily cached as to not invoke callback
-                //multiple times for one change)
+                // multiple times for one change)
     int new_value;
 
     /* input cell fields */

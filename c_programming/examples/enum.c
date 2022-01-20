@@ -24,8 +24,8 @@ int main()
     func(-1);   // -1
     func(3.3);  // 3 .. will be cast to integer (floored), regular implicit cast
     func(UINT_MAX);  // overflows to -1 (or maybe something else ... signed
-                     // overflow is undefined behavior in C but don't worry about
-                     // it ;) )
+                     // overflow is undefined behavior in C but don't worry
+                     // about it ;) )
     func(UINT_MAX + 1 == 0);  // 0==0 => 1 (true)
     func(secret_variable =
              (DOG));  // assignment is allowed here of course (argument
