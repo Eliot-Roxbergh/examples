@@ -1,3 +1,4 @@
+// Copyright 2022 Eliot Roxbergh. Licensed under AGPLv3 as per separate LICENSE file.
 #include <alloca.h>
 #include <assert.h>
 #include <stdio.h>
@@ -23,7 +24,7 @@
 
 // apa[5][3]
 // 5 pointers to int[3] arrays
-void func(int (*apa)[3], unsigned int len)
+void func(int (*apa)[], unsigned int len)
 {
     int my_apa[3];
     // my_apa = apa[1]; //not ok (there's no assignment operator for arrays)

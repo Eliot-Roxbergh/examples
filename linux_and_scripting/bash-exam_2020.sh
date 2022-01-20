@@ -1,6 +1,7 @@
 #!/bin/bash -e
-#Bash exam 2020
-#No warranty provided
+# Copyright 2020 Eliot Roxbergh, Licensed under AGPLv3 as per separate LICENSE file.
+# Bash exam 2020
+# No warranty provided, this is just an example of a larger Bash script
 
 # Price checker for imaginary items, has fake discount for elderly.
 #   CTRL+C (SIGINT) enters admin mode which shows some host information,

@@ -1,3 +1,5 @@
+// Copyright 2022 Eliot Roxbergh. Licensed under AGPLv3 as per separate LICENSE file.
+/*
 #include <stdio.h>
 #include <stdlib.h>
 #include "../read_input.h"
@@ -12,3 +14,4 @@ int main()
     free(input);
     return 0;
 }
+*/

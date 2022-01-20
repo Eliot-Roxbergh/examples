@@ -1,3 +1,4 @@
+# Copyright 2022 Eliot Roxbergh. All rights reserved.
 
 ###### Terminal settings / general ######
 
@@ -63,7 +64,7 @@ git push origin --delete <branch>
 grep -Hn <my_pattern> <files> #print filenames and line numbers
 
 #extract archive to a folder based on archive name, here "MY_STUFF/"
-tar xvf MY_STUFF.tar.gz --one-top-level 
+tar xvf MY_STUFF.tar.gz --one-top-level
 
 #see stats for a program, quite many uses
 time

@@ -1,3 +1,4 @@
+// Copyright 2022 Eliot Roxbergh. Licensed under AGPLv3 as per separate LICENSE file.
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>

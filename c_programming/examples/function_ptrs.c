@@ -1,3 +1,4 @@
+// Copyright 2022 Eliot Roxbergh. Licensed under AGPLv3 as per separate LICENSE file.
 /*
  * Simple example of function pointers, idea from
  * http://www.simplyembedded.org/archives/battle-of-the-standards-round-2-designated-initializers/

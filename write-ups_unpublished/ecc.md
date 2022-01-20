@@ -1,3 +1,5 @@
+_Copyright (c) 2022 Eliot Roxbergh. All rights reserved._
+
 Here is a quick summary for elliptic curve cryptography with emphasis on Edwards curves.
 
 

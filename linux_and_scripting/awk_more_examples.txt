@@ -1,4 +1,5 @@
 #!/bin/bash -eu
+# Copyright 2021 Eliot Roxbergh, Licensed under AGPLv3 as per separate LICENSE file.
 # Some general examples for AWK
 # For instance, how to make an OR-statement or how to write result to different files depending on the input.
 

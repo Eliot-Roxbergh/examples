@@ -1,3 +1,4 @@
+// Copyright 2022 Eliot Roxbergh. Licensed under AGPLv3 as per separate LICENSE file.
 #include <assert.h>
 #include <stdbool.h>
 #include <stdint.h>

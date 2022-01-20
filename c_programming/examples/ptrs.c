@@ -1,4 +1,4 @@
-/* Copyright Eliot Roxbergh 2020 */
+// Copyright 2020 Eliot Roxbergh. Licensed under AGPLv3 as per separate LICENSE file.
 
 /*
  * Just some simple examples on C pointers and memory.

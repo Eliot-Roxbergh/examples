@@ -1,5 +1,5 @@
 #!/bin/bash -u
-# © Eliot Roxbergh 2021
+# Copyright 2021 Eliot Roxbergh, Licensed under AGPLv3 as per separate LICENSE file.
 # Just learning awk.. feel free to give pointers.
 # Example how to write a longer awk script.
 #       Multiple queries are made for each line,

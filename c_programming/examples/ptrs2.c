@@ -1,3 +1,4 @@
+// Copyright 2022 Eliot Roxbergh. Licensed under AGPLv3 as per separate LICENSE file.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,8 +45,8 @@ int get_var(int **ret)  // this works
     a_ptr = (int *)&my_secret;
 
     *ret = a_ptr;  // OK, pass address (to "global" variable)
-    //*ret = (int*) &my_secret; //OK (this is basically the same as above)
-    //*ret = &a_ptr;  //(this function then needs to take int ***ret as input),
+    // *ret = (int*) &my_secret; //OK (this is basically the same as above)
+    // *ret = &a_ptr;  //(this function then needs to take int ***ret as input),
     // Not OK, we don't want to return address to local stack data (in this case
     // the data is another valid address, but it doesn't matter, it is stored in
     // soon-to-be-freed stack memory)

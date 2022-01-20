@@ -1,4 +1,5 @@
 #!/bin/bash -eu
+# Copyright 2021 Eliot Roxbergh, Licensed under AGPLv3 as per separate LICENSE file.
 # See Bash manual, shell parameter expansion, for more info
 # Guide here https://wiki.bash-hackers.org/syntax/pe
 #   See also POSIX bracket expressions (https://www.regular-expressions.info/posixbrackets.html)

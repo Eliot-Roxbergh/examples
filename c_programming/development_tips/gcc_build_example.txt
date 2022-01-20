@@ -1,4 +1,5 @@
 #!/bin/bash -eu
+# Copyright (c) 2022 Eliot Roxbergh, Licensed under AGPLv3 as per separate LICENSE file.
 # example on gcc building
 
 source_files="$@" #(shellcheck warns: https://github.com/koalaman/shellcheck/wiki/SC2124)
