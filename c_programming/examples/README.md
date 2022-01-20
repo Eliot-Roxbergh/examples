@@ -24,6 +24,7 @@ Run Semgrep (CI) and clang-tidy + cppcheck (via cmake). Semgrep uses Google Anal
 CodeQL gave little input, also it cannot be used on proprietary projects ... but no false positives so all good.
 
 Did not test Splint further, seems hard to setup properly and finds many false positives (or very specific requirements avoid these).
+But otherwise see this link for more info https://ulissesaraujo.wordpress.com/2009/05/03/splint-the-static-c-code-checker/
 
 ##### Results from Scanning
 
