@@ -51,6 +51,15 @@ endif()
 #    )
 #endif()
 
+#clang-format on all source files, including subdirectories
+file(GLOB_RECURSE SOURCE_FILES RELATIVE ${CMAKE_SOURCE_DIR} "*.c" "*.h")
+add_custom_target(
+    clang-format
+    COMMAND clang-format
+    -style=file #see file .clang-format
+    -i ${SOURCE_FILES}
+)
+
 cmake_minimum_required(VERSION 3.6)
 
 project(examples)
