@@ -11,7 +11,7 @@ For every commit, as well as once per week, a few analysis tools are ran:
 
 **codeql** (see https://semgrep.dev/orgs/eliot-roxbergh/findings)
 
-TODO yes these code warnings get lost and the tests does not necessarily fail, need to manually check as is now.
+TODO yes these code warnings get lost and the tests does not necessarily fail, need to manually check (in these three places) as is now.
 
 ## Static Code Analysis
 
@@ -36,11 +36,25 @@ cppcheck found two minor issues, one of which already reported by CodeQL.
 
 Would be interesting to also try Infer (https://github.com/facebook/infer).
 
-Manually specify rules in Semgrep, looks useful.
-
 CodeChecker is a front-end that support most of these tools (e.g. clang-tidy cppchecker infer cpplint), much easier to read the output.
 
-Integrate all into CI
+Also try (CodeQL and Semgrep) locally, to not be dependent upon Github
+
+Checkout old commit (c7b6691648a17b464c248754710f1d28fea44d6e), run all tools as a case study. Note that all these examples
+"work", gives no compiler warnings (see CMakeLists.txt) and memory leaks have been checked with Valgrind.
+Still, we get plenty of feedback from our static analysis tools. Good.
+Tools: clang-tidy, cppcheck, Semgrep, CodeQL, Infer (IWYU, LWYU, and linter tools are good but won't find any relevant bugs).
+Probably each tool will find something that the others did not find.
+Can we integrate all useful tools into one build flow? E.g. CodeChecker (clang-tidy, cppcheck, infer, (sparse)) + Semgrep looks quite powerful.
+
+
+#### Improvements
+
+Manually specify rules in Semgrep, looks useful.
+
+Integrate all into CI, get alerts in one place
+
+How does this relate to other methods/tools such as fuzzing or Valgrind.
 
 ### Style Feedback
 
