@@ -3,6 +3,7 @@
 #   TODO can we inherit tests from parent? So we don't need to run all tests every time.
 
 cmake_minimum_required(VERSION 3.6)
+project(react C)
 
 #This exercise does not have main, only run with test suite from Exercism.io ..
 #   Let's build as shared ("dynamic") library for now

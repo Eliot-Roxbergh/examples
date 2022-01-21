@@ -3,8 +3,7 @@
 #   TODO can we inherit tests from parent? So we don't need to run all tests every time.
 
 cmake_minimum_required(VERSION 3.6)
-
-project(advent2021)
+project(advent2021 C)
 
 #TODO make a loop for these... (see foreach)
 add_executable(1.out read_input.c 1/1.c)

@@ -1,8 +1,26 @@
 #Copyright 2022 Eliot Roxbergh. Licensed under AGPLv3 as per separate LICENSE file.
 #Example to build this: cmake --clean-first -DTEST_ALL=true . && cmake --build . && make clang-format
 
-set(C_STD c11)
+cmake_minimum_required(VERSION 3.6)
+project(examples C)
 
+set(C_STD c11)
+#TODO we set debug (-g) here, should just use -DCMAKE_BUILD_TYPE=Debug instead .. or similar
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=${C_STD} -g -fasynchronous-unwind-tables -fexceptions -Wall -Werror -pedantic -Wconversion -Wextra -Wformat=2 -Wformat-truncation -Wunused -Werror=implicit-function-declaration -Werror=format-security")
+
+add_executable(array         array.c)
+add_executable(bit_manip     bit_manip.c)
+add_executable(enum          enum.c)
+add_executable(function_ptrs function_ptrs.c)
+add_executable(ptrs          ptrs.c)
+add_executable(ptrs2         ptrs2.c)
+
+#Also build these projects
+add_subdirectory(advent2021)
+add_subdirectory(react_exercise)
+
+
+###############################################
 #Enable static analysis with -DTEST_ALL=true
 #   Some inspiration:
 #       https://www.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/
@@ -87,24 +105,7 @@ add_custom_target(
     ${SOURCE_FILES};
 )
 #TODO infer also looks like an interesting analyzer
+#TODO most these tools are supported in CodeChecker, easier to get an overview with that front-end
 #       https://github.com/facebook/infer
 #CodeQL and Semgrep are run via CI so not added here.
-
-cmake_minimum_required(VERSION 3.6)
-
-project(examples)
-
-#TODO we set debug (-g) here, should just use -DCMAKE_BUILD_TYPE=Debug instead .. or similar
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=${C_STD} -g -fasynchronous-unwind-tables -fexceptions -Wall -Werror -pedantic -Wconversion -Wextra -Wformat=2 -Wformat-truncation -Wunused -Werror=implicit-function-declaration -Werror=format-security")
-
-add_executable(array         array.c)
-add_executable(bit_manip     bit_manip.c)
-add_executable(enum          enum.c)
-add_executable(function_ptrs function_ptrs.c)
-add_executable(ptrs          ptrs.c)
-add_executable(ptrs2         ptrs2.c)
-
-#Also build these projects
-add_subdirectory(advent2021)
-add_subdirectory(react_exercise)
 
