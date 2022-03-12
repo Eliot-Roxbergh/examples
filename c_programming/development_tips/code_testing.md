@@ -1,5 +1,11 @@
 # Tools for C
 
+## Compiler, linker, ..
+
+Remember to enable relevant warnings in the compiler, as well as setting secure build flags.
+
+See my comments in _gcc_flags.md_
+
 ## Dynamic Program Analysis
 ### Memory Check and More
 
