@@ -7,9 +7,9 @@ For every commit, as well as once per week, a few analysis tools are ran:
 
 **cmake** (see _code-analysis_ output in https://github.com/Eliot-Roxbergh/examples/actions/workflows/cmake.yml. This includes different tools as specified in CMakeLists.txt)
 
-**semgrep** (see https://github.com/Eliot-Roxbergh/examples/security/code-scanning)
+**semgrep** (see https://semgrep.dev/orgs/eliot-roxbergh/findings)
 
-**codeql** (see https://semgrep.dev/orgs/eliot-roxbergh/findings)
+**codeql** (see https://github.com/Eliot-Roxbergh/examples/security/code-scanning)
 
 TODO yes these code warnings get lost and the tests does not necessarily fail, need to manually check (in these three places) as is now.
 
