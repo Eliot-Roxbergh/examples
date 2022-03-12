@@ -5,7 +5,7 @@
 source_files="$@" #(shellcheck warns: https://github.com/koalaman/shellcheck/wiki/SC2124)
 
 gcc_flags="-std=c11"
-gcc_flags_debug="-g -fasynchronous-unwind-tables -fexceptions -Wall -Werror -pedantic -Wconversion -Wextra -Wformat=2 -Wformat-truncation -Wunused -Werror=implicit-function-declaration -Werror=format-security"
+gcc_flags_debug="-g -fasynchronous-unwind-tables -fexceptions -Wall -Werror -pedantic -Wconversion -Wextra -Wformat=2"
 
 #Just took recommended flags from https://developers.redhat.com/blog/2018/03/21/compiler-and-linker-flags-gcc/, could require some more thought...
 gcc_flags_security="-D_FORTIFY_SOURCE=2  -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs "
