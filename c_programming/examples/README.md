@@ -57,6 +57,7 @@ Integrate all into CI, get alerts in one place
 
 How does this relate to other methods/tools such as fuzzing or Valgrind.
 
+
 ### Style Feedback
 
 #### Recommendation
@@ -64,6 +65,8 @@ How does this relate to other methods/tools such as fuzzing or Valgrind.
 Seems like clang-format and cpplint work well in combination, run with
 
 >make clang-format && make cpplint
+
+
 
 ##### Results from Scanning
 
@@ -73,3 +76,25 @@ cpplint gives some comments on code style which clang-format didn't fix.
 
 Overall I'm impressed. But remember to enable this, or similar, in your IDE.
 
+
+
+### Manual Examples
+
+Codechecker
+
+```
+make clean
+CodeChecker log --build "make" --output ./compile_commands.json
+CodeChecker analyze ./compile_commands.json --enable sensitive --ctu --clean --output ./reports
+CodeChecker parse reports/ 
+```
+
+clang-format
+
+```
+#Create config
+clang-format -style="{BasedOnStyle: Google, IndentWidth: 4, BreakBeforeBraces: Linux, ColumnLimit: 80}"  --dump-config > .clang-format
+
+#Run on all source files (!)
+clang-format -style=file -i */*.c */*.h */*.cpp
+```
