@@ -59,31 +59,43 @@ __DEBUG__
 -fexceptions                                    Enable table-based thread cancellation
 -grecord-gcc-switches                           Store compiler flags in debugging information
 -pipe                                           Avoid temporary files, speeding up builds
--Wall                                           Recommended compiler warnings
--Werror=format-security                         Reject potentially unsafe format string arguments
--Werror=implicit-function-declaration           Reject missing function prototypes                      ("C only")
 -fplugin=annobin                                Generate data for hardening quality control             (some fancy new metadata feature IDK)
+-Og                                             -                                                       (build optimized for debugging)
+```
 
-
--Wextra -Wall -pedantic                         -                                                        These flags enable numerous extra warnings (but not all)
-                                                                                                         (includes e.g. -Wunused, Wformat-truncation, -Wformat=1)
+__WARNINGS__
+```
+-Werror=format-security                         Reject potentially unsafe format string arguments       (warning is already included in -Wformat=2)
+-Werror=implicit-function-declaration           Reject missing function prototypes                      (warning is already included in -Wall) ("C only")
 -Werror                                                                                                  Make all warnings into errors
--Wconversion                                                                                             Warn on implicit conversions that may alter the value (such as converting to a smaller variable or from signed to unsigned)
+
+-Wextra -Wall -pedantic                         -                                                        These flags enable numerous extra warnings (but not "all") (for pedantic remember to set --std= to your standard version)
+                                                                                                         (includes e.g. -Wunused, Wformat-truncation, -Wformat=1)
+
+-Wconversion                                    -                                                        Warn on implicit conversions that may alter the value (such as converting to a smaller variable or from signed to unsigned)
                                                                                                          I strongly recommend to enable this, otherwise gcc doesn't say anything on e.g.: unsigned char a = -1;
                                                                                                          (It doesn't warn on explicit casts.)
+-Wformat=2                                      -                                                        Mostly enables security warnings regarding printf and scanf functions
 ```
 
 __OPTIMIZE__
 ```
--O2                                             Recommended optimizations (for test/debugging lower optimization could give simpler assembly code and not optimize away unused stuff etc.?)
+-O2                                             Recommended optimizations                                (for test/debugging lower optimization could give simpler assembly code and e.g. not optimize away unused code..)
+
+
+-Og - (most debug info, while quick to run and some optimizations in code)
+-O0 - (fewest, but some, optimizations)
+
+-S  - (get assembly code as output, note that your optimization level changes the result)
 ```
 
 Table taken from [gcc_recommended_flags] with my modifications and I added the last column with my own comments (the middle column is direct citation from their site).
 
-### Example
+### Suggested Flags from Above (WIP)
 
 ```
-gcc_flags_debug="-g -fasynchronous-unwind-tables -fexceptions -Wall-pedantic -Wextra -Werror -Wformat=2  -Wconversion"
+gcc_flags_debug="-g -fasynchronous-unwind-tables -fexceptions"
+gcc_flags_warnings="-Wall -Wextra -pedantic -Werror -Wformat=2  -Wconversion"
 
 gcc_flags_security="-D_FORTIFY_SOURCE=2  -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs "
 gcc_flags_security_exec="-fpie -Wl,-pie"
