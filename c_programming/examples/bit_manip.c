@@ -10,9 +10,22 @@
  *      https://stackoverflow.com/a/58845898 mentions that "Do not use bitwise
  * operators with signed operands"
  *  - Werror=conversion, seems quite odd? See examples below.
+ *
+ * Addendum:
+ *        This makes more sense if we consider variables shorter than int
+ *        are converted to int ("integer promotion") in arithmetic operations (such as * / % + - < > <= == & ^).
+ *        Additionally, it seems from these examples that it's OK to do
+ *        int big = INT_MAX; unsigned char a = big & CHAR_MAX; //(casting CHAR_MAX to int is also ok here)
+ *        But the same does not work with &(CHAR_MAX+1) or &UCHAR_MAX, 
+ *        not sure why, but could relate to integer promotions (where unsigned char may be promoted to int),
+ *        or are there some special rules with the & operator?
+ *
  */
+
 int main()
 {
+    //127 = 0x7F = CHAR_MAX
+    //255 = 0xFF = UCHAR_MAX
     unsigned char bits = 5;
     unsigned char bits_inverse = 0;
     bits_inverse = (unsigned char)~bits;  // compiles OK!
@@ -25,7 +38,7 @@ int main()
 
     // BUT!
     // bits_inverse = ~bits;             //gcc says error: -Werror=conversion
-    // bits_inverse = ~bits & (0xFF-1);  //gcc says error: -Werror=conversion
+    // bits_inverse = ~bits & (0xFF);  //gcc says error: -Werror=conversion
     printf("%u\n", bits_inverse);
 
     /*
