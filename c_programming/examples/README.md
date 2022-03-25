@@ -1,3 +1,10 @@
+# WIP
+
+**This description is outdated, for code testing see separate repo** https://github.com/Eliot-Roxbergh/static_analysis
+
+
+
+
 # C Programming
 
 ## CI
@@ -40,14 +47,7 @@ CodeChecker is a front-end that support most of these tools (e.g. clang-tidy cpp
 
 Also try (CodeQL and Semgrep) locally, to not be dependent upon Github
 
-Checkout old commit (_22fb2a9fac7cfe60031cdf500f1d9d6e819348c7_ +fix formatting with clang-format and cpplint), run all tools as a case study. Note that all these examples
-"work", gives no compiler warnings (see CMakeLists.txt) and memory leaks have already been checked with Valgrind. All good right? Not so fast..
-We get plenty of feedback from our static analysis tools. Good, let's fix it!
-_**Tools**: clang-tidy, cppcheck, Semgrep, CodeQL, Infer (IWYU, LWYU, and linter tools are good but won't find any security bugs)_.
-Probably each tool will find something that the others did not find.
-Q: Were any bug exploitable or what's going on? Sort by category?
-Q: How long to filter out false positives? etc.
-Bonus Q: Can we integrate all useful tools into one build flow? E.g. CodeChecker (clang-tidy, cppcheck, infer, (sparse)) + Semgrep looks quite powerful. But no CI right now, thats beyond our scope.
+**SEE SEPARATE REPO** https://github.com/Eliot-Roxbergh/static_analysis
 
 #### Improvements
 
