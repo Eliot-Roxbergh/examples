@@ -34,7 +34,7 @@ __SECURITY STUFF__
 -fstack-clash-protection                        Increased reliability of stack overflow detection       (>GCC 7.5??)
 -fstack-protector or -fstack-protector-all      Stack smashing protector                                (Stack canary. -all is mostly overkill and -strong was added to give a good middle ground -> [fstack-protector])
                   or -fstack-protector-strong   -
--mcet -fcf-protection                           Control flow integrity protection                       (Not in my GCC. Intel only?)
+-mcet -fcf-protection=full                      Control flow integrity protection                       (Intel only)
 
 -Wl,-z,now                                      Disable lazy binding                                    Not a security feature directly but it allows for relro (see below).
                                                                                                         (Disable lazy binding... also https://stackoverflow.com/questions/23485489/does-clang-gcc-really-support-a-delay-loading-feature)
@@ -49,8 +49,9 @@ __SECURITY STUFF__
 __DIV__
 ```
 -Wl,-z,defs                                     Detect and reject underlinking                          "Report unresolved symbol references from regular object files.  This is done even if the linker is creating a non-symbolic shared library."
-                                                                                                         (like if one library requires a symbol from another lib, which could be missing?
-                                                                                                          -> https://stackoverflow.com/questions/2356168/force-gcc-to-notify-about-undefined-references-in-shared-libraries)
+                                                                                                        (like if one library requires a symbol from another lib, which could be missing?
+                                                                                                         -> https://stackoverflow.com/questions/2356168/force-gcc-to-notify-about-undefined-references-in-shared-libraries)
+-fno-common                                     -                                                       Detects multiple definitions.. "places uninitialized global variables in the BSS section" (should be default in newer GCC >=10?)
 ```
 __DEBUG__
 ```
@@ -60,7 +61,7 @@ __DEBUG__
 -grecord-gcc-switches                           Store compiler flags in debugging information
 -pipe                                           Avoid temporary files, speeding up builds
 -fplugin=annobin                                Generate data for hardening quality control             (some fancy new metadata feature IDK)
--Og                                             -                                                       (build optimized for debugging)
+-Og                                             -                                                       (build optimized for debugging, seems like this can also detect some errors)
 ```
 
 __WARNINGS__
