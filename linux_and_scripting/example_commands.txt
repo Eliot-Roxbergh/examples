@@ -1,5 +1,5 @@
 # Copyright 2018 Eliot Roxbergh. All rights reserved.
-# This collection is a few years old
+# This collection is a few years old!
 # Strip lines starting with # to get condensed version
 
 
@@ -45,8 +45,8 @@
     # Networking:
         nmap  192.168.1.X       #scan ports below 1000
         nmap -p- 192.168.1.X    #scan all ports
-        nmap -O 192.168.1.0/24  #scan devices for kernel , ports and MAC
-        nmap -sP 192.168.1.0/24 #scan devices for MAC adr
+        sudo nmap -O 192.168.1.0/24 #scan given subnet for ports, MAC, and guessed kernel verison
+        sudo nmap 192.168.1.0/24 #scan devices for MAC adr (should be default with root privileges)
         netstat -l --inet       #active connections (ports)
         netstat -tuplen         #active connections (ports)
         rsync --progress --ignore-existing -rve ssh /path/file user@192.168.1.X:"~/"  # (Note partial files are kept), in other direction just switch place
@@ -149,10 +149,13 @@
     git log          # commit history
     git show    # show precise changes in log?
     git diff      # show changes
-    git merge
-    git stash save [--no-keep-index]
-    git stash drop stash@\{0\}
-    git config --global credential.helper cache && git config --global credential.helper 'cache --timeout=10000'
+    git fetch && git merge
+    git rebase -i HEAD~2
+    
+    # Git more:
+        git stash save [--no-keep-index]
+        git stash drop stash@\{0\}
+        git config --global credential.helper cache && git config --global credential.helper 'cache --timeout=10000'
 
 # LVM:
     sudo vgscan         # scan
