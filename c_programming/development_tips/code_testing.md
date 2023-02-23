@@ -56,6 +56,11 @@ sudo apt install -y git fakeroot build-essential ncurses-dev xz-utils libssl-dev
 sudo apt install -y dwarves sparse
 # (get kernel to ./linux)
 cd linux
+
+make menuconfig #save config
+# probably need to add cert for kernel signature checking
+#   -> https://stackoverflow.com/questions/67670169/compiling-kernel-gives-error-no-rule-to-make-target-debian-certs-debian-uefi-ce
+vim .config #add stuff from link above...
 ```
 
 #### Analyze patch diff
@@ -82,7 +87,7 @@ It is also possible to run sparse only on some files:
 
 ```
 # Analyze all C=2
-make C=2 some/interesting/path
+make C=2 some/interesting/file
 ```
 
 
