@@ -1,7 +1,9 @@
 # WIP
 
-**This description is outdated, for code testing see separate repo** https://github.com/Eliot-Roxbergh/static_analysis
-
+**This description is outdated!** \
+| \
+_**--> See my static analysis comparison for more info:**_ https://github.com/Eliot-Roxbergh/static_analysis \
+_**--> For an example of C project with static analysis setup see:**_ https://github.com/Eliot-Roxbergh/task_portknocker
 
 
 
