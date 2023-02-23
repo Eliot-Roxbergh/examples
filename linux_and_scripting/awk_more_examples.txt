@@ -29,3 +29,26 @@ awk 'BEGIN{output_file="first.txt"; print "" > output_file}
      /^[0-9]$/     {print >> output_file}
      /.*REQUEST_NEW_FILE.*/ {output_file="second.txt"; print > output_file}
      ' < input_file
+
+
+##### 3: Practical example, list/parse git modified files #####
+# Compare current commit with older "clean_linux" commit
+# (Just something I wrote quickly)
+
+# Single line for further parsing by SAST tools (or whatever)
+#   Include only .c .h files
+#   Ignore all fields but the actual full pathname.
+#   Combine into one single line, seperated by "," (replace newline with comma)
+git diff clean_linux --numstat  | awk '/\.[ch]/' | awk '{print $3}' | awk  NF=NF RS= OFS=","  > clang-files_to-analyze
+
+# Readable format
+#    List .c .h files (retain original order by pathname)
+#    Ignore files with <= 40 added/modified lines
+git diff clean_linux --numstat  | awk '($1 > 40)' | awk 'BEGIN{print "Added   Removed (lines)   File"}  /\.[ch]/ {print}'
+
+# Readable format, similarly as above
+#    List .c .h files (retain original order by pathname)
+#    Include only files with security related names in the path
+#    Include only files Added or Modified (--diff-filter AM)
+#    Sort by nr of modified lines
+git diff clean_linux --numstat --diff-filter AM  | grep -e misc -e apparmor -e selinux -e crypto -e security | sort -V |  awk 'BEGIN{print "Added   Removed (lines)   File"}  /\.[ch]/ {print}'
