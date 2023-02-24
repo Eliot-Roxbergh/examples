@@ -46,3 +46,29 @@ info //a lot can be printed with info
 info registers
 info args //arguments to current function
 info locals //current local variables
+
+### Debugging Linux Programs ###
+
+## Get debug symbols ##
+# Debian 11 / Ubuntu 22 or newer, get debug symbols with Debuginfod [1].
+# Set path to symbols used in your distro, e.g. by setting,
+export DEBUGINFOD_URLS="https://debuginfod.debian.net"
+# or, export DEBUGINFOD_URLS="https://debuginfod.ubuntu.com"
+
+## Get source ##
+#   (package is probably patched for debian/ubuntu so use the same src as in apt)
+# These steps might not be completely "correct" (TODO) but this worked for me
+
+# Use sources from apt to get correct version & applied patches
+# Note --> also enable deb-src in /etc/apt/sources.list
+cd /tmp/
+apt source PACKAGE
+sudo mv PACKAGE.X.Y/ /usr/lib/debug/
+
+## GDB ##
+# Start gdb with the src directory from above (-d or 'directory' in GDB)
+# If not found, see which relative path the program uses and update directory accordingly (this is a bit of a pain in the ass so probably there's a standard location for this?)
+gdb  -d /usr/lib/debug/PACKAGE.X.Y PROGRAM-NAME
+
+
+[1] - https://ubuntu.com/server/docs/service-debuginfod, https://wiki.debian.org/Debuginfod
