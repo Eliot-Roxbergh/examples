@@ -70,5 +70,12 @@ sudo mv PACKAGE.X.Y/ /usr/lib/debug/
 # If not found, see which relative path the program uses and update directory accordingly (this is a bit of a pain in the ass so probably there's a standard location for this?)
 gdb  -d /usr/lib/debug/PACKAGE.X.Y PROGRAM-NAME
 
+## GDB cont. core dump ##
+# Default uses apport (OR systemd-coredump), see `less /var/log/apport.log` and apport-unpack for .crash file (/var/crash/)
+gdb qemu-system-x86_64 CoreDump #(or `core-file CoreDump` in GDB)
+bt #(or `bt full`)
+frame 0 #jump to a specific frame listed by bt
+list #show source code if available
 
-[1] - https://ubuntu.com/server/docs/service-debuginfod, https://wiki.debian.org/Debuginfod
+[1] - https://ubuntu.com/server/docs/service-debuginfod, https://wiki.debian.org/Debuginfod \
+Specifically, "Currently, the service only provides DWARF information. There are plans to make it also index and serve source-code in the future."
