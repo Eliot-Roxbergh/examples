@@ -1,5 +1,7 @@
 # Building secure C Binary
-Here is my quick summary on hardening C binaries using GCC on Linux. As well as other GCC / linker settings.
+Here is a summary on hardening C binaries using GCC on Linux. As well as other GCC / linker settings.
+
+Not all useful compilation flags are discussed, to see what I use see: _<https://github.com/Eliot-Roxbergh/task_portknocker/blob/master/CMakeLists.txt>_.
 
 Sources and links at the end.
 
@@ -79,6 +81,11 @@ __WARNINGS__
 -Wformat=2                                      -                                                        Mostly enables security warnings regarding printf and scanf functions
 ```
 
+__RUNTIME CHECKS__
+```
+-fsanitize=address,undefined                    Stop program or generate trap on certain conditions      Can catch errors otherwise hard to detect. Does require that specific situation to arise in runtime.
+```
+
 __OPTIMIZE__
 ```
 -O2                                             Recommended optimizations                                (for test/debugging lower optimization could give simpler assembly code and e.g. not optimize away unused code..)
@@ -92,7 +99,10 @@ __OPTIMIZE__
 
 Table taken from [gcc_recommended_flags] with my modifications and I added the last column with my own comments (the middle column is direct citation from their site).
 
-### Suggested Flags from Above (WIP)
+### Suggested Flags from Above (OUTDATED)
+
+**Outdated**, for a full example see instead: _<https://github.com/Eliot-Roxbergh/task_portknocker/blob/master/CMakeLists.txt>
+(or <https://github.com/Eliot-Roxbergh/examples/blob/master/c_programming/development_tips/gcc_build_example.sh>)_
 
 ```
 gcc_flags_debug="-g -fasynchronous-unwind-tables -fexceptions"
@@ -102,7 +112,6 @@ gcc_flags_security="-D_FORTIFY_SOURCE=2  -D_GLIBCXX_ASSERTIONS -fstack-protector
 gcc_flags_security_exec="-fpie -Wl,-pie"
 gcc_flags_security_lib="-fpic"
 //more="-fstack-clash-protection -mcet -fcf-protection" # (not in my GCC)
-// Just took recommended flags from https://developers.redhat.com/blog/2018/03/21/compiler-and-linker-flags-gcc/, could require some more thought...
 ```
 
 
@@ -116,5 +125,6 @@ gcc_flags_security_lib="-fpic"
 
 [object-size-checking] - https://gcc.gnu.org/legacy-ml/gcc-patches/2004-09/msg02055.html
 
-More reading on recommended GCC flags: https://security.stackexchange.com/questions/24444/what-is-the-most-hardened-set-of-options-for-gcc-compiling-c-c, https://wiki.debian.org/Hardening
+More reading on recommended GCC flags: https://security.stackexchange.com/questions/24444/what-is-the-most-hardened-set-of-options-for-gcc-compiling-c-c, https://wiki.debian.org/Hardening, \
+and https://nrk.neocities.org/articles/c-static-analyzers
 
