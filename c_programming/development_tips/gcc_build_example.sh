@@ -6,15 +6,24 @@ source_files="$@" #(shellcheck warns: https://github.com/koalaman/shellcheck/wik
 
 #std: the latest should already the default
 gcc_flags=" -O3 -std=gnu11 -fno-common "
-#debug: enable when necessary, not to use in production
-gcc_flags_debug=  #gcc_flags_debug="-g -0g -fasynchronous-unwind-tables -fexceptions"
+
 
 gcc_flags_warnings=" -Wall -Wextra -pedantic -Werror -Wformat=2 -Wconversion -Wdouble-promotion -Wshadow -Wundef "
-gcc_flags_security="-D_FORTIFY_SOURCE=2  -D_GLIBCXX_ASSERTIONS -fstack-protector-strong -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs "
+gcc_flags_security="-D_FORTIFY_SOURCE=2  -D_GLIBCXX_ASSERTIONS -fcf-protection=full -fstack-protector-strong -Wl,-z,noexecstack -Wl,-z,now -Wl,-z,relro -Wl,-z,defs "
 gcc_flags_security_exec="-fpie -Wl,-pie"
 gcc_flags_security_lib="-fpic"
-#more="-fstack-clash-protection -mcet -fcf-protection" # depends on GCC version and some are hw specific
+#more="-fstack-clash-protection -mcet" # depends on GCC version and some are hw specific
 
+#                      Debug                         #
+# Enable when necessary, not to use in production !! #
+#
+gcc_flags_debug="-g -0g -fasynchronous-unwind-tables -fexceptions"
+# Extra warnings
+gcc_flags_extra_warnings=" -fanalyzer -Wcast-qual -Wcast-align -Wredundant-decls -Winline -Wdisabled-optimization -Wnested-externs -fstrict-aliasing " #more: -Wmissing-prototypes -Wmissing-declarations
+# Runtime checks (fails will stop the program)
+gcc_flags_runtime_checks=" -fsanitize=address,undefined "
+# Apply new warnings to debug
+gcc_flags_debug="$gcc_flags_debug $gcc_flags_extra_warnings $gcc_flags_runtime_checks"
 
 # I) build library
 
