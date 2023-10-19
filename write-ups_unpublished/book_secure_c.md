@@ -2,7 +2,7 @@
 _2021-2022, Eliot Roxbergh_
 
 
-**TODO:** summary ends at 450 out of ~550 pages of [the book](https://www.amazon.com/Secure-Coding-2nd-Software-Engineering/dp/0321822137).
+_TODO: summary ends at 450 out of ~550 pages of [the book](https://www.amazon.com/Secure-Coding-2nd-Software-Engineering/dp/0321822137)._
 
 This document contains a very rough, dirty, summary of _[Secure Coding in C and C++](https://www.amazon.com/Secure-Coding-2nd-Software-Engineering/dp/0321822137)_ [code_book], as well as other related material summarized (see last chapter "Off-Topic").
 Idea was to use this document as a quick reference with ctrl+f. I write this from a C standpoint, mainly skipping C++ details.
@@ -440,6 +440,7 @@ In this subsection are some comments from/on [dynamic-libraries].
 (__It sounds like__) Dynamic linking not only makes smaller binaries, but it could also lessen the memory requirements as multiple processes could share the same shared memory, containing the shared library (read-only).
 This is all during runtime and when the first process makes this function call (or when the process itself is started if not lazy binding) it is loaded into shared memory (only the library code block that is).
 
+```
 Comment: On page 836 it's mentioned that it is loaded when the program is started, but I thought it is more common when the function is actually called? Maybe they are correct since it's usually better with longer startup time than abrupt delay some time during runtime.
 	 This can be set with LD_BIND_NOW (but is not default?)
 	 	(not related? You can also preload, overwrite, specific libraries with LD_PRELOAD)
@@ -450,34 +451,37 @@ Comment: On page 836 it's mentioned that it is loaded when the program is starte
               		     deferring function call resolution to the point when they
               		     are first referenced.  This is useful when using a
               		     debugger."
+```
 
-Dynamic linking has some overhead since we need to go through the PLT, also hard to optimize across compilation units (especially for dynamic linking since then the library is then not optimize able by linker? For static linking we can do LTO?).
-Statically linked binary; More optimizations can be made if we compile all static libraries together with the binary, and not link in precompiled libaries.
+Dynamic linking has some overhead since we need to go through the PLT, also hard to optimize across compilation units (especially for dynamic linking since then the library is then not optimize able by linker? For static linking we can do LTO?). \
+Statically linked binary; More optimizations can be made if we compile all static libraries together with the binary, and not link in precompiled libaries. \
 Shortly mentioned here https://youtu.be/dOfucXtyEsU?t=3511
 
+```
     "Link Time Optimization (LTO) gives GCC the capability of dumping its internal representation (GIMPLE) to disk, so that all the different compilation units that make up a single executable can be optimized as a single module. This expands the scope of inter-procedural optimizations to encompass the whole program (or, rather, everything that is visible at link time)." [LTO]
-(So here I assume this can't be done for dynamically linked libraries since these are not in the actual executable)
+```
+(So here I assume this can't be done for dynamically linked libraries since these are not in the actual executable) \
 Thoughts: Also during runtime I assume no real optimizations can be made, only thing we have is dynamic linker. ... (part assumption from my part;) The situation is different for languages that runs on top of a virtual machine (e.g. Java) which can make runtime optimizations (see "dynamic compilation").
 
-Generally PIC (-fPIC) is generally required for shared libraries (as compared to static libraries), and even if not, PIC is necessary if multiple processes are to use the same library .text (code) segment, saving memory.
+Generally **PIC** (-fPIC) is generally required for shared libraries (as compared to static libraries), and even if not, PIC is necessary if multiple processes are to use the same library .text (code) segment, saving memory.
 
-$LD_LIBRARY_PATH is (one of the places) where the _dynamic linker_ looks during runtime for the libraries needed (as specified in the ELF exectuable). Static libraries are already linked in before runtime - "static linking".
+**$LD_LIBRARY_PATH** is (one of the places) where the _dynamic linker_ looks during runtime for the libraries needed (as specified in the ELF exectuable). Static libraries are already linked in before runtime - "static linking".
 
-soname -> Multiple versions of same library have same soname as long as compatible, thereafter it's incremented. For example, libx.so.1 could point to (symbolic link) libx.so.1.0.1 or to libx.so.1.9.3 which would have the same ABI exposed.
-Format is libx.so.[major-id].[minor-id] for the shared library. (pp. 845-846)
+**soname** -> Multiple versions of same library have same soname as long as compatible, thereafter it's incremented. For example, libx.so.1 could point to (symbolic link) libx.so.1.0.1 or to libx.so.1.9.3 which would have the same ABI exposed. \
+Format is libx.so.[major-id].[minor-id] for the shared library. (pp. 845-846)  \
 There is also "linker name" which is version independent (just get the newest version, e.g. libx.so -> libx.so.2.0.1 or (soname) libx.so.2)
 
-Tools: ldd, objdump (and readelf), nm - are mentioned pp. 843-844 and examples are shown later in the chapter.
+**Tools:** ldd, objdump (and readelf), nm - are mentioned pp. 843-844 and examples are shown later in the chapter.
 
-ldconfig keeps track of; Libraries present and path is cached (/etc/ld.so.cache) print with ldconfig -p. Versions and updates symlinks to libs (i.e. for soname and linker name). So ldconfig needs to be run if a library is updated or added.
+**ldconfig** keeps track of; Libraries present and path is cached (/etc/ld.so.cache) print with ldconfig -p. Versions and updates symlinks to libs (i.e. for soname and linker name). So ldconfig needs to be run if a library is updated or added. \
 ldconfig -n can be used for "private libaries" - it doesn't update cache (which is global in /etc/) and only processes the library paths given as argument (e.g. ".").
 
-When building we can also set rpath (runtime path, related are DT_RPATH and DT_RUNPATH (they are slightly different things)) where the dynamic linker will look, in addition to (1) the standard library directories (/lib, /usr/lib, and lasted in /etc/ld.so.conf) and (2) directories in LD_LIBRARY_PATH.
+When building we can also set rpath (runtime path, related are DT_RPATH and DT_RUNPATH (they are slightly different things)) where the dynamic linker will look, in addition to (1) the standard library directories (/lib, /usr/lib, and lasted in /etc/ld.so.conf) and (2) directories in LD_LIBRARY_PATH. \
 (An alternative is to instead set the LD_RUN_PATH during building for similar result ... and leave rpath empty)
 
-$ORIGIN can be used to load (shared) libraries relative to where the executable is located, e.g. to deliver an application with shared libraries bundled in one archive.
+**$ORIGIN** can be used to load (shared) libraries relative to where the executable is located, e.g. to deliver an application with shared libraries bundled in one archive.
 
-Finding shared libraries at runtime ->
+**Finding shared libraries at runtime** ->
 	if contains slash it's a path and that is used
 	else
 		check (DT_RPATH) rpath (set during linking)
@@ -486,8 +490,8 @@ Finding shared libraries at runtime ->
 		(check DT_RUNPATH (set during linking) )
 		check standard library locations /etc/ld.so.cache and /lib and /usr/lib (set whenever, by root)
 
-It can get confusing if there are multiple definitions of the same function (i.e. symbol). Local definitions will trump any function definition from shared library, and if multiple definitions in multiple libraries it will take the first one mentioned (left-to-right).
--Bsymbolic can be used when building (linking) a library, references to functions FROM this library should if possible be to definitions IN this same library (_"references to global symbols within a shared library should preferentially bound to definitions (if they exist) within that library"_)
+It can get confusing if there are multiple definitions of the same function (i.e. symbol). Local definitions will trump any function definition from shared library, and if multiple definitions in multiple libraries it will take the first one mentioned (left-to-right). \
+-Bsymbolic can be used when building (linking) a library, references to functions FROM this library should if possible be to definitions IN this same library (_"references to global symbols within a shared library should preferentially bound to definitions (if they exist) within that library"_) \
 The C keyword _static_ has similar effect as -Bsymbolic, in addition _static_ also makes the symbol private for that source file. A similar keyword is __GCC__ _hidden_, which instead of per source file makes the symbol private (and "-Bsymbolic") for/within the whole library.
 
 ( Static libaries can still be preferable in some cases, (I assume also less error prone, less complexity and therefore also good in sensitive applications). And if we want static linking make sure it's not in really taking .so (shared) when we want .a (static) library... described 41.13 pg. 856 )
@@ -501,9 +505,9 @@ We can thereby ~"open shared library at runtime, search for func, and then call 
 
 ###### (Reducing exposed symbols)
 
-Less symbols is good: smaller, faster, less symbol collision... and in general why expose more than you need [GCC-visibility].
-Linker version scripts - can control symbol visibility and versioning... -> e.g. specify exactly which symbols to expose ("whitelist" or "blacklist"... uh you get the point)
-Another alternative is to set -fvisibility=hidden (set default symbol visibility -> hidden). This can then be overridden for each function \_\_attribute\_\_((visibility("default")))
+Less symbols is good: smaller, faster, less symbol collision... and in general why expose more than you need [GCC-visibility]. \
+Linker version scripts - can control symbol visibility and versioning... -> e.g. specify exactly which symbols to expose ("whitelist" or "blacklist"... uh you get the point) \
+Another alternative is to set -fvisibility=hidden (set default symbol visibility -> hidden). This can then be overridden for each function \_\_attribute\_\_((visibility("default"))) \
 Some links on this: https://stackoverflow.com/questions/435352/limiting-visibility-of-symbols-when-linking-shared-libraries, [GCC-visibility], https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html
 
 ###### "Monitoring the dynamic linker"
@@ -735,6 +739,7 @@ NOTE!: char can be either unsigned or signed in implementation (not standardized
 pp. 242-245: size_t, ptrdiff_t, intmax_t/uintmax_t, intptr_t/uintptr_t, plattform in-/-dependent integer types.
 
 independed such as int8_t, uint8_t, but also int_least8_t (at least 8 bits wide) and int_fast8_t ..
+
 Comment: Interesting... so we have a fast type (from stackoverflow ~ it's a type of at least X bits which is the best from a performance point-of-view.)
 	 I guess this could be that a 32bit value could be used instead of 16 or 8 if faster, I think this can often be the case (i.e. faster) actually (downside more memory used of course).
 	 This might be reasonable, from The Rust Programming Language book 32 bit is the standard integer size since they claim that's often the fastest on modern 32 or 64 bit systems. [Rust-faster]
@@ -759,15 +764,18 @@ Addendum: Variables of different or _the same_ sizes are promoted to int in arit
 
 Types have ranks, so long int is greater than int etc (more on pg. 247).
 In an expression (the "usual arithmetic conversions" such as * / % + - < > <= == & ^) to a higher rank, the lesser can be promoted, such as;
+```
     unsigned char a = UCHAR_MAX;
     unsigned int  b = UCHAR_MAX;
     unsigned int  c = a*b;
+```
 
 Note: int c = a*b, is the same as c = (int) (a*b); [citation needed], thus is a and b are shorter than int, data can be lost
 To be sure with a larger type on the left side, cast the first one (left-to-right) to target size:
-	char a = CHAR_MAX,
-             b = CHAR_MAX;
-	int  c = (int) a*b; // a, b are promoted to int to avoid potential overflow during calculation
+```
+    char a = CHAR_MAX,
+         b = CHAR_MAX;
+    int  c = (int) a*b; // a, b are promoted to int to avoid potential overflow during calculation
 //on the other hand, this wouldn't work, left-to-right evaluation, res = a*b*(int) c*d;
 
 //Example of bug
@@ -777,43 +785,51 @@ To be sure with a larger type on the left side, cast the first one (left-to-righ
     unsigned long r1 = x * y * z;  // = 255
     unsigned long r2 = z * x * y;  // = 13835056960065503487
     printf("xyz=%lu, zxy=%lu\n\n\n",r1,r2);
+```
 
 Note: as mentioned in the book (pg 248). Promotions could give surprising results if we want to do very specific or bit-level operations and the variable is promoted, such as:
+```
     unsigned char us = UCHAR_MAX; // = 0xFF
     int            i = ~uc;       // = 0xFFFFFF00 (Maybe we expected 0x00000000 here)
+```
 
 The book does not say too much on this. But consider also potential overflows in more complex expressions:
+```
     signed char c1,c2,c3;
     int res = c1 * c2 / c3
+```
+
 Reading left to right, c1*c2 will be calculated before division by c3. Thus a potential overflow could happen in (int) c1*c2 depending on their types.
 However, in this example, signed char is shorther than int so they will be promoted, luckily (char*char) is smaller than int so no overflow is possible (2^(8+8) <= INT_MAX).
 But in another case, such as if c1,c2,c3 were int above, ((int*int)/int) could indeed overflow as these variables do not need be promoted.
+```
     Instead, we could choose to cast the left-most variable to a larger type which we know will fit the calculation:
         int32_t c1,c2,c3;
         int32_t sum = ((int64_t) c1) * c2 / c3
     The result would then after the division be truncated (both are signed types) to 32 bit once again (which is undefined behavior if the value does not fit but.. :) ),
     however if the divisor c3 is large enough we can be sure that no trunctation will be made.
-
+```
 
 This reminds me of the ALU (Arithmetic Logic Unit) in the CPU. But maybe confusing to think in hardware here? e.g. 32 bit could be the usual most fast register + ALU input size?
 
 ¹   C standard, section 6.3.1:
-        "The following may be used in an expression wherever an int or unsigned int may be used:
-         - An object or expression with an integer type (other than int or unsigned int) whose integer conversion rank is less than or equal to the rank of int and unsigned int.
-         - A bit-field of type _Bool, int, signed int, or unsigned int.
-         - If an int can represent all values of the original type (as restricted by the width, for a bit-field), the value is converted to an int; otherwise, it is converted to an unsigned int.
-           These are called the integer promotions. All other types are unchanged by the integer promotions."
-    section 6.3.1.8:
-        "If both operands have the same type, then no further conversion is needed.
-         - Otherwise, if both operands have signed integer types or both have unsigned integer types,
-        the operand with the type of lesser integer conversion rank is converted to the type of the operand with greater rank.
-         - Otherwise, if the operand that has unsigned integer type has rank greater or equal to the rank of the type of the other operand,
-        then the operand with signed integer type is converted to the type of the operand with unsigned integer type.
-         - Otherwise, if the type of the operand with signed integer type can represent all of the values of the type of the operand with unsigned integer type,
-        then the operand with unsigned integer type is converted to the type of the operand with signed integer type.
-         - Otherwise, both operands are converted to the unsigned integer type corresponding to the type of the operand with signed integer type."
-    from http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf
-
+```
+ "The following may be used in an expression wherever an int or unsigned int may be used:
+- An object or expression with an integer type (other than int or unsigned int) whose integer conversion rank is less than or equal to the rank of int and unsigned int.
+- A bit-field of type _Bool, int, signed int, or unsigned int.
+- If an int can represent all values of the original type (as restricted by the width, for a bit-field), the value is converted to an int; otherwise, it is converted to an unsigned int.
+  These are called the integer promotions. All other types are unchanged by the integer promotions."
+section 6.3.1.8:
+ "If both operands have the same type, then no further conversion is needed.
+ - Otherwise, if both operands have signed integer types or both have unsigned integer types,
+    the operand with the type of lesser integer conversion rank is converted to the type of the operand with greater rank.
+ - Otherwise, if the operand that has unsigned integer type has rank greater or equal to the rank of the type of the other operand,
+    then the operand with signed integer type is converted to the type of the operand with unsigned integer type.
+ - Otherwise, if the type of the operand with signed integer type can represent all of the values of the type of the operand with unsigned integer type,
+    then the operand with unsigned integer type is converted to the type of the operand with signed integer type.
+ - Otherwise, both operands are converted to the unsigned integer type corresponding to the type of the operand with signed integer type."
+from: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf
+```
 
 ### Conversions
 
@@ -1117,13 +1133,17 @@ Set the umask/permissions properly before the file is created, otherwise the att
 
 C11 added fopen_s, which to the extent supported by the OS, *"use a file permission that prevent other users from accessing the file"* (pg. 431) (more <https://en.cppreference.com/w/c/io/freopen>).
 
-
-
--> BOOKMARK: you are here 432 <-
-
-
-
 ## Recommendations (Chap. 9)
+
+TODO
+
+## End of book
+
+-> BOOKMARK: you are here 432 <- \
+**- Here ends the book! -** \
+**Other notes and reading below.**
+
+
 
 
 
@@ -1135,10 +1155,14 @@ Initialize struct to zero with {0} is cleaner,
 and also more hardware independent, than memset.
 
 compare
+```
     struct sockaddr_in client_addr;
     memset(&client_addr, 0, sizeof client_addr);
+```
 and
+```
     struct sockaddr_in client_addr = {0};
+```
 
 With memset all fields will simply have the value 0 written to them,
 however we then assume that 0 has a bit representation
