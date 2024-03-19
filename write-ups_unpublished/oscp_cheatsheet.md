@@ -1,5 +1,6 @@
 # OSCP exam cheatsheet (summary from my notes)
-_Eliot Roxbergh for my OSCP exam 2024-02, I have yet to upload my complete notes but here is the summary I used for the exam._
+_Eliot Roxbergh for my OSCP exam 2024-02, I have yet to upload my complete notes but here is the summary I used for the exam._ \
+_My relevant scripts are located here: [./OSCP_scripts](OSCP_scripts). They may be a bit ugly._
 
 Search "**tldr**" for some checklists below. \
 TIP: see "**main tldr**" and "**linux tldr**" and "**ad tldr**" below.
