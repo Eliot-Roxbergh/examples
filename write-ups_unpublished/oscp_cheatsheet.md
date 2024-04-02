@@ -361,8 +361,8 @@ lsblk; df -h; mount
 
 ## More ##
 # Network
-sudo netstat -tuln
-ss -tuln
+sudo netstat -tulnp
+sudo ss -tulnp
 # Processes
 ps aux
 # Check logs
@@ -385,8 +385,9 @@ find / -perm -4000 -ls 2>/dev/null
 
 - **How to see which process is using port?**
 ```bash
-# See sockets / ports
-sudo netstat -tuln
+# See sockets / ports (-p to list program)
+sudo netstat -tulnp
+sudo ss -tulnp
 # (on Windows its netstat -ano)
 
 # List process using port (5432)
