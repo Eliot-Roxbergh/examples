@@ -146,7 +146,7 @@ Another example: it could also be that a customer has an iframe to their own bac
 Q: but CORS only affects certain type of requests, how would you allow some cross-site requests from certain sources while stoping others? -> maybe CSRF not a problem since modern sites shouldnt really use PUT and POST instead use these CORS-limited functions (JS, AJAX, .. stuff)
 
 Note: SameSite=Lax and CORS-allow-credentials=True should block cookies no problem, but other kinds of credentials can exist.\
-**Note: SameSite=Lax risk of subdomain takeover attacks!**
+**Note: SameSite attribute does not protect against subdomain takeover attacks (!)**, nor against injection attacks (to perform actions on the site using those cookies) such as XSS or HTML injection.
 
 #### Mitigation
 
@@ -181,7 +181,8 @@ Also:
 - Origin: site that makes request (Note: usually same-origin, except cases such as Fetch mentioned above. So CORS does often not "matter": e.g. if following a link on badsite.x to site, or site in an iframe on badsite.x)
 
 ### Cookie settings
-- Cookie SameSite (Strict/Lax/None): If cookie should be included in "cross-origin" requests, thus often not necessary to relax (SameSite=None). (however it is required in Fetch described earlier). In modern browsers SameSite=Lax should be the default, but it wasn't in my Firefox as described above.
+- Cookie SameSite (Strict/Lax/None): If cookie should be included in "cross-origin" requests, thus often not necessary to relax (SameSite=None). (however it is required in Fetch described earlier). In modern browsers SameSite=Lax should be the default, but it wasn't in my Firefox as described above. \
+Note the definition of SameSite, for instance *.github.com are **different** "sites" (as per https://publicsuffix.org/), while *.r0x.se would all be considered SameSite (see also e.g. https://jub0bs.com/posts/2021-01-29-great-samesite-confusion/).
 
 ### General
 - iframe: is a separate environment "similar to" another tab. An iframe usually includes browser cookies if already logged in to that site elsewhere (if other domain must be SameSite=None),
