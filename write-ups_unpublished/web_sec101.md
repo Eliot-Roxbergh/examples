@@ -4,7 +4,8 @@ _2023-10, Eliot Roxbergh_
 Some notes on web security. Headers, cookies, ..
 
 ## iframe: Firefox vs Chromium
-It gets complicated as Firefox and Chromium acts differently regarding iframes as well as cookies.
+It gets complicated as Firefox and Chromium acts differently regarding iframes as well as cookies.\
+Note: this demo may differ on other platforms / distributions as this behavior can be affected by browser settings.
 
 Cookies can be set either via Javascript document.cookie, or the Set-Cookie HTTP header. In testing this did not make any difference.
 
