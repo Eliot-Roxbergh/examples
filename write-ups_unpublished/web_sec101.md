@@ -181,8 +181,15 @@ Also:
 - Origin: site that makes request (Note: usually same-origin, except cases such as Fetch mentioned above. So CORS does often not "matter": e.g. if following a link on badsite.x to site, or site in an iframe on badsite.x)
 
 ### Cookie settings
-- Cookie SameSite (Strict/Lax/None): If cookie should be included in "cross-origin" requests, thus often not necessary to relax (SameSite=None). (however it is required in Fetch described earlier). In modern browsers SameSite=Lax should be the default, but it wasn't in my Firefox as described above. \
+- Cookie SameSite (Strict/Lax/None): If cookie should be included in "cross-origin" requests, thus often not necessary to relax (SameSite=None). (however it is required in Fetch described earlier). In modern browsers SameSite=Lax should be the default, but it wasn't in my Firefox as described above.
+
+_SameSite: None_ - Allow cookie to be sent cross-site \
+_SameSite: Lax_ - Allow cookie to be sent cross-site ONLY IF it's a safe type of request (e.g. GET, HEAD) AND it's a top-level navigation (i.e. ~ was it a user action that resulted in change of the URL bar, and NOT javascript or an embedded resource such as iframe) \
+_SameSite: Strict_ - Do not allow cookie to be sent cross-site. \
+Note that same site requests are always allowed such as cookies from _monkey.r0x.se_ to _zebra.r0x.se_.
+
 Note the definition of SameSite, for instance *.github.com are **different** "sites" (as per https://publicsuffix.org/), while *.r0x.se would all be considered SameSite (see also e.g. https://jub0bs.com/posts/2021-01-29-great-samesite-confusion/).
+
 
 ### General
 - iframe: is a separate environment "similar to" another tab. An iframe usually includes browser cookies if already logged in to that site elsewhere (if other domain must be SameSite=None),
