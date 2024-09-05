@@ -96,8 +96,8 @@ To reiterate: the policy decides allowances for each type, and the security cont
 For instance, the file 'file_contexts' holds regex to file(s) and the default context they should have.
 - Boolean [1], an easy way to toggle certain parts of a policy at runtime. Thereby, it also shows common options that may be relevant for that policy.  \
 Example: \
-The boolean 'allow_ftpd_anon_write' modifies the policy for ftpd to allow its Anonymous users to write to disk. This is achieved with the _type_ 'ftpd_anon_rw_t' (to put it simply: like a special file permission), which is applied to files or directories that the anonymous user should have access to.
-As the application (ftpd) itself is not aware of SELinux, SELinux bases this on the (process and) file _types_. 
+The boolean 'allow_ftpd_anon_write'[3] modifies the policy for ftpd to allow so-called anonymous users to write to disk. This is achieved with the _type_ 'public_content_rw_t' (to put it simply: like a special file permission), which is applied to files or directories that the anonymous user should have access to.
+As the application (ftpd) itself is not aware of SELinux, SELinux bases this on the process and file _types_. **TODO:** question, how does SELinux correctly identify that the FTP user writing is anonymous?
 
 
 **Example of file types and names:**
@@ -106,7 +106,8 @@ As the application (ftpd) itself is not aware of SELinux, SELinux bases this on 
 - Context: file_contexts (for _file_ system objects)
 
 [1] - <https://wiki.gentoo.org/wiki/SELinux/Tutorials/Using_SELinux_booleans> \
-[2] - <https://selinuxproject.org/page/BasicConcepts>
+[2] - <https://selinuxproject.org/page/BasicConcepts> \
+[3] - <https://linux.die.net/man/8/ftpd_selinux>
 
 #### AppArmor
 
