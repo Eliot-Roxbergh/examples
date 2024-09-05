@@ -84,7 +84,19 @@ Show active processes, list and sort by security label (here AppArmor), example,
 
 #### SELinux
 
-Default block
+Default block, possible to change.
+
+Tutorial: <https://wiki.gentoo.org/wiki/SELinux/Tutorials>
+
+**Some terms:**
+- Policy: Define roles/types and what they should be able to do. The idea is something like: different types can then be given to system objects (such as file or ports) via security contexts - i.e. the policy decides allowances for each type, and the context defines which object has that type. 
+- Context: "Every process and object in the system has a context (also known as a label)" [2]. This can apply to files, ports, X11, etc. For instance, the file 'file_contexts' holds regex to file(s) and the default context they should have.
+- Boolean [1], control policy decisions. Such as file 'booleans.local' \
+Example: _'allow_ftpd_anon_write' would modify the ftpd policy to allow Anonymous users to write to disk via an FTP process, which seems to be achieved with special file permissions 'ftpd_anon_rw_t'._
+_And as the FTP application itself is not aware of SELinux, SELinux somehow sees that it's the anonymous user that's writing: presumably the file is written by the 'ftp' user as opposed to a normal system user._
+
+[1] - <https://wiki.gentoo.org/wiki/SELinux/Tutorials/Using_SELinux_booleans> \
+[2] - <https://selinuxproject.org/page/BasicConcepts>
 
 #### AppArmor
 
