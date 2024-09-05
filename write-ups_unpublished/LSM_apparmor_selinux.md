@@ -89,11 +89,21 @@ Default block, possible to change.
 Tutorial: <https://wiki.gentoo.org/wiki/SELinux/Tutorials>
 
 **Some terms:**
-- Policy: Define roles/types and what they should be able to do. The idea is something like: different types can then be given to system objects (such as file or ports) via security contexts - i.e. the policy decides allowances for each type, and the context defines which object has that type. 
-- Context: "Every process and object in the system has a context (also known as a label)" [2]. This can apply to files, ports, X11, etc. For instance, the file 'file_contexts' holds regex to file(s) and the default context they should have.
-- Boolean [1], control policy decisions. Such as file 'booleans.local' \
-Example: _'allow_ftpd_anon_write' would modify the ftpd policy to allow Anonymous users to write to disk via an FTP process, which seems to be achieved with special file permissions 'ftpd_anon_rw_t'._
-_And as the FTP application itself is not aware of SELinux, SELinux somehow sees that it's the anonymous user that's writing: presumably the file is written by the 'ftp' user as opposed to a normal system user._
+- Policy: Define types and what they should be able to do. \
+Which objects have these types are then given to system objects (such as file or ports) via security contexts. \
+To reiterate: the policy decides allowances for each type, and the security context defines which object has that type. 
+- Context: "Every process and object in the system has a context (also known as a label)" [2], this includes _type_ but also _user_, _role_, and an optional _sensitivity level_. This system object can be a file, port, or even X11, etc.\
+For instance, the file 'file_contexts' holds regex to file(s) and the default context they should have.
+- Boolean [1], an easy way to toggle certain parts of a policy at runtime. Thereby, it also shows common options that may be relevant for that policy.  \
+Example: \
+The boolean 'allow_ftpd_anon_write' modifies the policy for ftpd to allow its Anonymous users to write to disk. This is achieved with the _type_ 'ftpd_anon_rw_t' (to put it simply: like a special file permission), which is applied to files or directories that the anonymous user should have access to.
+As the application (ftpd) itself is not aware of SELinux, SELinux bases this on the (process and) file _types_. 
+
+
+**Example of file types and names:**
+- Booleans: booleans.local
+- Policy: policy.30 (binary file)
+- Context: file_contexts (for _file_ system objects)
 
 [1] - <https://wiki.gentoo.org/wiki/SELinux/Tutorials/Using_SELinux_booleans> \
 [2] - <https://selinuxproject.org/page/BasicConcepts>
