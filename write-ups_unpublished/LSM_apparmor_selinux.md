@@ -59,7 +59,7 @@ can either be default block or default allow depending on the configuration
 
 Here we directly notice two potential issues;
 1. AppArmor has default allow (blacklist) - so by moving a file it gains full access.
-2. With default block (whitelist) - it could be possible to pretend to be another file by overwriting it (inode for SELinux¹, path for AppArmor), thereby gaining its access
+2. With default block (whitelist) - it could be possible to pretend to be another file by overwriting it (inode for SELinux, path for AppArmor)¹, thereby gaining its access
 
 Remember that, even a default allow is better than nothing.
 We could, for instance, add a rule for the most "dangerous" programs: Firefox, Libreoffice, Thunderbird, and Docker comes to mind.
@@ -67,7 +67,7 @@ The idea is then that the security poilicy would protect the system even if one 
 exploited by a 0day vulnerability. It would however not protect from attacks targeting other services, or if an attacker already has access to the system (e.g. logging in as a legitimate user).
 
 
-¹ Is it harder to overwrite an inode than path?
+¹ Surely it is harder to overwrite a file (inode) than a path (where we could create a file if it would not exist).
 
 ### Practical
 
@@ -99,7 +99,7 @@ For instance, the file 'file_contexts' holds regex to file(s) and the default co
 Example: \
 The boolean 'allow_ftpd_anon_write'[3] modifies the policy for ftpd to allow so-called anonymous users to write to disk. This is achieved with the _type_ 'public_content_rw_t' (to put it simply: like a special file permission), which is applied to files or directories that the anonymous user should have access to.
 As the application (ftpd) itself is not aware of SELinux, SELinux bases this on the process and file _types_. _**TODO:** question, how does SELinux correctly identify that the FTP user writing is anonymous?_
-
+- Domain: 
 
 **Example of file types and names:**
 - Booleans: `booleans.local` (persistent config of which booleans should be on)
