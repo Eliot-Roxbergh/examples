@@ -109,7 +109,7 @@ As the application (ftpd) itself is not aware of SELinux, SELinux bases this on 
 - Booleans: `booleans.local` (persistent config of which booleans should be on)
 - Policy: `policy.30` (all the compiled rules that will be used by SELinux system-wide, `.30` is simply the policy version). \
 It may for instance be viewed with `seinfo policy.30  --all`
-- Contexts: e.g. `file_contexts` (for _file_ system objects), this specifies the default contexts (labels) for different files and directories on disk.
+- Contexts: e.g. `file_contexts`, `file_context*`, (for _file_ system objects), this specifies the default contexts (labels) for different files and directories on disk.
 Files may be deviate from this default (e.g. if it's simply moved there or was manually changed), it can optionally be restored with `restorecon`. \
 Example line: `/var/ftp(/.*)?    system_u:object_r:ftpd_anon_rw_t:s0`
 
