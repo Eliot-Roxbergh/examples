@@ -1,7 +1,7 @@
 # Linux Security Modules
 _2023-03, Eliot Roxbergh_
 
-An overview of Linux hardening using Mandatory Access Control and such.
+An overview of Linux hardening using Mandatory Access Control (MAC) and such.
 
 ## See Also
 
@@ -84,6 +84,8 @@ Show active processes, list and sort by security label (here AppArmor), example,
 ### Details
 
 #### SELinux
+_"SELinux is a labeling system. Every process has a label. Every file, directory, or system object has a label.
+Policy rules control access between labeled processes and labeled objects. Enforced by the kernel (LSM)."_
 
 Default block, possible to change.
 
@@ -93,13 +95,15 @@ Tutorial: <https://wiki.gentoo.org/wiki/SELinux/Tutorials>
 - Policy: Define types and what they should be able to do. \
 Which objects have these types are then given to system objects (such as file or ports) via security contexts. \
 To reiterate: the policy decides allowances for each type, and the security context defines which object has that type. 
-- Context/Label: "Every process and object in the system has a context (also known as a label)" [2], this includes _type_ but also _user_, _role_, and an optional _sensitivity level_. This system object can be a file, port, or even X11, etc.\
+- Context/Label: "Every process and object in the system has a context (also known as a label)" [2], this includes _type_ but also _user_, _role_, and an optional _sensitivity level_¹. This system object can be a file, port, or even X11, etc.\
 For instance, the file 'file_contexts' holds regex to file(s) and the default context they should have. This also extends to binaries that are run, which creates a process in the related domain (_**TODO:** see "domain transition rules" which specifies this label should allow process to transition from its inherited domain into that of the rule, such as pop_t_)
 - Boolean [1], an easy way to toggle certain parts of a policy at runtime. Thereby, it also shows common options that may be relevant for that policy.  \
 Example: \
 The boolean 'allow_ftpd_anon_write'[3] modifies the policy for ftpd to allow so-called anonymous users to write to disk. This is achieved with the _type_ 'public_content_rw_t' (to put it simply: like a special file permission), which is applied to files or directories that the anonymous user should have access to.
 As the application (ftpd) itself is not aware of SELinux, SELinux bases this on the process and file _types_. _**TODO:** question, how does SELinux correctly identify that the FTP user writing is anonymous?_
-- Domain: 
+- Domain:
+
+¹ See Multi-Level Security (MLS) and Multi-Category Security (MCS): <https://selinuxproject.org/page/MLSStatements>, <https://selinuxproject.org/page/MultiCategorySecurity>, <https://www.redhat.com/en/blog/why-you-should-be-using-multi-category-security-your-linux-containers>
 
 **Example of file types and names:**
 - Booleans: `booleans.local` (persistent config of which booleans should be on)
