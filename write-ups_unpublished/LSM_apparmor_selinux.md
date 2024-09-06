@@ -84,10 +84,12 @@ Show active processes, list and sort by security label (here AppArmor), example,
 ### Details
 
 #### SELinux
-_"SELinux is a labeling system. Every process has a label. Every file, directory, or system object has a label.
-Policy rules control access between labeled processes and labeled objects. Enforced by the kernel (LSM)."_
 
-Default block, possible to change.
+SELinux has **default block**, unlike AppArmor.
+
+For an introduction see <https://www.youtube.com/watch?v=Wv9kwlabdlo>: \
+≈ _"SELinux is a labeling system. Every process has a label. Every file, directory, or system object has a label.
+Policy rules control access between labeled processes and labeled objects. Enforced by the kernel (LSM)"_.
 
 Tutorial: <https://wiki.gentoo.org/wiki/SELinux/Tutorials>
 
@@ -115,7 +117,8 @@ Example line: `/var/ftp(/.*)?    system_u:object_r:ftpd_anon_rw_t:s0`
 
 [1] - <https://wiki.gentoo.org/wiki/SELinux/Tutorials/Using_SELinux_booleans> \
 [2] - <https://selinuxproject.org/page/BasicConcepts> \
-[3] - <https://linux.die.net/man/8/ftpd_selinux>
+[3] - <https://linux.die.net/man/8/ftpd_selinux> \
+[4] - <https://www.youtube.com/watch?v=Wv9kwlabdlo>
 
 #### AppArmor
 
