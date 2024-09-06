@@ -87,25 +87,25 @@ Show active processes, list and sort by security label (here AppArmor), example,
 
 SELinux has **default block**, unlike AppArmor.
 
-For an introduction see <https://www.youtube.com/watch?v=Wv9kwlabdlo>: \
+For an introduction see _<https://www.youtube.com/watch?v=Wv9kwlabdlo>_: \
 ≈ _"SELinux is a labeling system. Every process has a label. Every file, directory, or system object has a label.
 Policy rules control access between labeled processes and labeled objects. Enforced by the kernel (LSM)"_.
 
-Tutorial: <https://wiki.gentoo.org/wiki/SELinux/Tutorials>
+Tutorial: _<https://wiki.gentoo.org/wiki/SELinux/Tutorials>_
 
 **Some terms:**
-- Policy: Define types and what they should be able to do. \
+- **Policy**: Define types and what they should be able to do. \
 Which objects have these types are then given to system objects (such as file or ports) via security contexts. \
 To reiterate: the policy decides allowances for each type, and the security context defines which object has that type. 
-- Context/Label: "Every process and object in the system has a context (also known as a label)" [2], this includes _type_ but also _user_, _role_, and an optional _sensitivity level_¹. This system object can be a file, port, or even X11, etc.\
+- **Context**/**Label**: "Every process and object in the system has a context (also known as a label)" [2], this includes _type_ but also _user_, _role_, and an optional _sensitivity level_¹. This system object can be a file, port, or even X11, etc.\
 For instance, the file 'file_contexts' holds regex to file(s) and the default context they should have. This also extends to binaries that are run, which creates a process in the related domain (_**TODO:** see "domain transition rules" which specifies this label should allow process to transition from its inherited domain into that of the rule, such as pop_t_)
-- Boolean [1], an easy way to toggle certain parts of a policy at runtime. Thereby, it also shows common options that may be relevant for that policy.  \
+- **Boolean** [1], an easy way to toggle certain parts of a policy at runtime. Thereby, it also shows common options that may be relevant for that policy.  \
 Example: \
 The boolean 'allow_ftpd_anon_write'[3] modifies the policy for ftpd to allow so-called anonymous users to write to disk. This is achieved with the _type_ 'public_content_rw_t' (to put it simply: like a special file permission), which is applied to files or directories that the anonymous user should have access to.
 As the application (ftpd) itself is not aware of SELinux, SELinux bases this on the process and file _types_. _**TODO:** question, how does SELinux correctly identify that the FTP user writing is anonymous?_
-- Domain:
+- **Domain**:
 
-¹ See Multi-Level Security (MLS) and Multi-Category Security (MCS): <https://selinuxproject.org/page/MLSStatements>, <https://selinuxproject.org/page/MultiCategorySecurity>, <https://www.redhat.com/en/blog/why-you-should-be-using-multi-category-security-your-linux-containers>
+¹ See Multi-Level Security (**MLS**) and Multi-Category Security (**MCS**): _<https://selinuxproject.org/page/MLSStatements>, <https://selinuxproject.org/page/MultiCategorySecurity>, <https://www.redhat.com/en/blog/why-you-should-be-using-multi-category-security-your-linux-containers>_
 
 **Example of file types and names:**
 - Booleans: `booleans.local` (persistent config of which booleans should be on)
@@ -117,15 +117,13 @@ Example line: `/var/ftp(/.*)?    system_u:object_r:ftpd_anon_rw_t:s0`
 
 [1] - <https://wiki.gentoo.org/wiki/SELinux/Tutorials/Using_SELinux_booleans> \
 [2] - <https://selinuxproject.org/page/BasicConcepts> \
-[3] - <https://linux.die.net/man/8/ftpd_selinux> \
-[4] - <https://www.youtube.com/watch?v=Wv9kwlabdlo>
+[3] - <https://linux.die.net/man/8/ftpd_selinux>
 
 #### AppArmor
 
 AppArmor has default allow (!) [1], but it is possible to set a default block rule as well [2].
 
-General: [3]
+For an introduction see: _<https://www.youtube.com/watch?v=PRZ59lxLlOY>_
 
 [1] - https://wiki.ubuntu.com/SecurityTeam/KnowledgeBase/AppArmorProfiles \
-[2] - https://lists.ubuntu.com/archives/apparmor/2012-December/003241.html \
-[3] - https://www.youtube.com/watch?v=PRZ59lxLlOY
+[2] - https://lists.ubuntu.com/archives/apparmor/2012-December/003241.html
