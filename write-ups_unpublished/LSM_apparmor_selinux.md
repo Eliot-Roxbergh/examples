@@ -114,10 +114,17 @@ It may for instance be viewed with `seinfo policy.30  --all`
 - Contexts: e.g. `file_contexts`, `file_context*`, (for _file_ system objects), this specifies the default contexts (labels) for different files and directories on disk.
 Files may be deviate from this default (e.g. if it's simply moved there or was manually changed), it can optionally be restored with `restorecon`. \
 Example line: `/var/ftp(/.*)?    system_u:object_r:ftpd_anon_rw_t:s0`
+- Policy module: binary `localpolicy.pp`, source `localpolicy.te` (monolithic policies vs individual loadable policies [5])
+
+**To build binary policy, some relevant files [4][5]:** policy source `policy.conf`, loadable modules `*.te` (monolithic policies will be included in policy, individual loadable policies compiled to separate binary `*.pp`), contexts `*_context*` `contexts/*`, users and roles `seusers` `users` `roles`, makefile `makefile` \
+**Runtime config:** e.g. booleans `booleans*` \
+**Relevant dirs:** e.g. `/etc/selinux`, `find / -iname "selinux" -type d 2> /dev/null`
 
 [1] - <https://wiki.gentoo.org/wiki/SELinux/Tutorials/Using_SELinux_booleans> \
 [2] - <https://selinuxproject.org/page/BasicConcepts> \
-[3] - <https://linux.die.net/man/8/ftpd_selinux>
+[3] - <https://linux.die.net/man/8/ftpd_selinux> \
+[4] - <https://selinuxproject.org/page/PolicyConfigurationFiles> \
+[5] - <https://selinuxproject.org/page/NB_RefPolicy#Reference_Policy_Files_and_Directories>
 
 #### AppArmor
 
