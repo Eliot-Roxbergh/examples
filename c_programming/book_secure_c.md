@@ -380,16 +380,17 @@ we may make the GOT read-only and thus avoid potential exploits. This is called 
 **Update:**
 - .got includes variable addresses, .got.plt includes function addresses: <https://stackoverflow.com/questions/11676472/what-is-the-difference-between-got-and-got-plt-section>, <https://stevens.netmeister.org/631/elf.html>
 - Partial RELRO (as opposed to Full RELRO) is default in GCC and ONLY protects .got, thus .got.plt is still writable and exploitable: <https://book.hacktricks.xyz/binary-exploitation/common-binary-protections-and-bypasses/relro#partial-relro>, <https://www.mdpi.com/2076-3417/12/13/6702>.
-- With Full RELRO we can try to perform a buffer overflow attack to replace the return address to a viable gadget already in got.plt.
-- With Partial RELRO _(here assumes no ASLR)_ we can perform different kinds of _simpler_ attacks to replace the .got.plt entry itself;
-<https://medium.com/@0xwan/binary-exploitation-heap-overflow-to-overwrite-got-d3c7d97716f1>. _My understanding is that: the stack grows downwards with new allocations and as it does the start of the stack decreases, moreover the addressing starts there and goes _upwards_ meaning we cannot directly "go down in memory", i.e. read/write to the heap, or GOT, for instance (which would only be technically reachable with many new allocations that would error out due to overflow into, "overlap with", heap memory) (<https://security.stackexchange.com/questions/135786/if-the-stack-grows-downwards-how-can-a-buffer-overflow-overwrite-content-above/135798#135798>) - even if we could probably use this overflow in multiple steps, e.g. \w gadgets, to achieve the same in practice._
+- With Full RELRO an attacker could try to perform buffer overflow attacks to replace the return address to a viable gadget already in got.plt. The GOT cannot be modified, period.
+- With Partial RELRO _(here assumes no ASLR)_ it's possible perform different kinds of _simpler_ attacks to replace the .got.plt entry itself;
+<https://medium.com/@0xwan/binary-exploitation-heap-overflow-to-overwrite-got-d3c7d97716f1>.
 First of all we can on a non-ASLR system directly read or write to the got.plt addresses (and other addresses such as data) - this is necessary for normal program functioning: in this case it needs to be because GOT uses lazy-binding as described below?
-_(TODO: offtopic, can the stack be reachable directly from program via $RSP (x86_64) address? i.e. could a general arbitrary write also change the return ret address)_
 That is, no magic necessary - we can simply make a memory write - if we control the code: <https://ir0nstone.gitbook.io/notes/binexp/stack/got-overwrite/exploiting-a-got-overwrite>, it exists in its memory space (literally).
-_Example with stack buffer overflow (TODO how and TODO why is overflow used here) <https://www.exploit-db.com/papers/13203>._ \
-Why use complex overflow techniques to overwrite got.plt entries then? Answer: overflow or similar attacks might be used in-the-wild as an attacker will want try to change the process' execution path without modifying the binary (as the binary could have no write permissions, or communicated with remotely over the Internet, etc.),
-which in this case could be done by somehow overwriting a single address in got.plt via arbitrary write.
-One can imagine different ways where stack overflows or other methods could create arbitrary ("out-of-bounds") writes here
+Why use complex overflow techniques to overwrite got.plt entries then? Answer: overflow or similar attacks might be used in-the-wild as an attacker will want try to change the process' execution path without modifying the binary (as the binary could have no write permissions, or communicated with remotely over the Internet, etc.), which in this case could be done by somehow overwriting a single address in got.plt via arbitrary write.
+One can imagine different ways where overflows, integer overflows, stack overflows or other methods could create arbitrary ("out-of-bounds") writes here.\
+Questions/WIP: \
+ _My understanding is that: the stack grows downwards with new allocations and as it does the start of the stack decreases, moreover the addressing starts there and goes _upwards_ meaning we cannot directly "go down in memory", i.e. read/write to the heap, or GOT, for instance (which would only be technically reachable with many new allocations that would error out due to overflow into, "overlap with", heap memory) (<https://security.stackexchange.com/questions/135786/if-the-stack-grows-downwards-how-can-a-buffer-overflow-overwrite-content-above/135798#135798>) - even if we could probably use this overflow in multiple steps, e.g. \w gadgets, to achieve the same in practice._ \
+_offtopic, can the stack be reachable directly from program via $RSP (x86_64) address? i.e. could a general arbitrary write also change the return ret address_ \
+_Example with stack buffer overflow (TODO how and TODO why is overflow used here) <https://www.exploit-db.com/papers/13203>._
 - Note that ASLR / PIE can make these attacks more difficult. GOT-related attacks are done to bypass certain protection mechanisms such as NX-bit.
 
 
