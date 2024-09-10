@@ -371,6 +371,12 @@ Unrelated?; "There is one GOT per compilation unit or object module, and it is l
 (I might be wrong here, but quite certain that;) PIE is necessary for executing code which addresses are not known at link/compile time. But even without PIE the stack and heap may be randomized [ASLR_Linux_bypass].
 ( So with ASLR e.g.; stack starts at random address (randomness but stack/exec/heap/libs are still in a certain area, and grows in a certain direction), heap starts at random address, lib (ld.so?) starts at random adr (must have PIE..?), exec starts on random address (if PIE) )
 
+**Update:** \
+- .got includes variable addresses, .got.plt includes function addresses: <https://stackoverflow.com/questions/11676472/what-is-the-difference-between-got-and-got-plt-section>, <https://stevens.netmeister.org/631/elf.html>
+- Partial RELRO (as opposed to Full RELRO) is default in GCC and ONLY protects .got, thus .got.plt is still writable and exploitable: <https://book.hacktricks.xyz/binary-exploitation/common-binary-protections-and-bypasses/relro#partial-relro>, <https://www.mdpi.com/2076-3417/12/13/6702>.
+- With Full RELRO we can try to perform a buffer overflow attack to replace the return address to a viable gadget already in got.plt.
+- With Partial RELRO can try to perform a heap overflow attack to replace the .got.plt entry itself: <https://medium.com/@0xwan/binary-exploitation-heap-overflow-to-overwrite-got-d3c7d97716f1>
+- Note that ASLR / PIE / PIC can make these attacks more difficult. GOT-related attacks are done to bypass certain protection mechanisms such as NX-bit.
 
 ##### Lazy Binding, PLT, GOT
 
