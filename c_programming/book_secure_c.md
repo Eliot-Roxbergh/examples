@@ -371,19 +371,23 @@ Unrelated?; "There is one GOT per compilation unit or object module, and it is l
 (I might be wrong here, but quite certain that;) PIE is necessary for executing code which addresses are not known at link/compile time. But even without PIE the stack and heap may be randomized [ASLR_Linux_bypass].
 ( So with ASLR e.g.; stack starts at random address (randomness but stack/exec/heap/libs are still in a certain area, and grows in a certain direction), heap starts at random address, lib (ld.so?) starts at random adr (must have PIE..?), exec starts on random address (if PIE) )
 
+
+##### Lazy Binding, PLT, GOT (RELRO)
+
+**tl;dr** By disabling lazy binding (i.e. to instead load all dynamically linked functions at beginning of execution),
+we may make the GOT read-only and thus avoid potential exploits. This is called **RELRO**, and can be passed to the linker.
+
 **Update:**
 - .got includes variable addresses, .got.plt includes function addresses: <https://stackoverflow.com/questions/11676472/what-is-the-difference-between-got-and-got-plt-section>, <https://stevens.netmeister.org/631/elf.html>
 - Partial RELRO (as opposed to Full RELRO) is default in GCC and ONLY protects .got, thus .got.plt is still writable and exploitable: <https://book.hacktricks.xyz/binary-exploitation/common-binary-protections-and-bypasses/relro#partial-relro>, <https://www.mdpi.com/2076-3417/12/13/6702>.
 - With Full RELRO we can try to perform a buffer overflow attack to replace the return address to a viable gadget already in got.plt.
-- With Partial RELRO can try to perform a different kinds of overflow attacks to replace the .got.plt entry itself: <https://medium.com/@0xwan/binary-exploitation-heap-overflow-to-overwrite-got-d3c7d97716f1>. _My understanding is that - the stack grows downwards with new allocations and as it does the start of stack changes, the addressing start there and goes _upwards_ meaning it cannot reach the heap or GOT for instance (which would only be reachable with a new allocation that would error out due to overflow into heap memory)  (<https://security.stackexchange.com/questions/135786/if-the-stack-grows-downwards-how-can-a-buffer-overflow-overwrite-content-above/135798#135798>)._ It's possible on a non-ASLR system to directly read or write got.plt addresses (and other addresses such as data, but not stack?) no overflow necessary: <https://ir0nstone.gitbook.io/notes/binexp/stack/got-overwrite/exploiting-a-got-overwrite>, it exists in its memory space so to speak. Example with stack buffer overflow (TODO and TODO why is overflow necessary here) <https://www.exploit-db.com/papers/13203>.
-- Note that ASLR / PIE / PIC can make these attacks more difficult. GOT-related attacks are done to bypass certain protection mechanisms such as NX-bit.
+- With Partial RELRO _(here assumes no ASLR)_ can try to perform a different kinds of _simpler_ attacks to replace the .got.plt entry itself: <https://medium.com/@0xwan/binary-exploitation-heap-overflow-to-overwrite-got-d3c7d97716f1>. _My understanding is that - the stack grows downwards with new allocations and as it does the start of stack changes, the addressing start there and goes _upwards_ meaning it cannot reach the heap or GOT for instance (which would only be reachable with a new allocation that would error out due to overflow into heap memory)  (<https://security.stackexchange.com/questions/135786/if-the-stack-grows-downwards-how-can-a-buffer-overflow-overwrite-content-above/135798#135798>)._ It's possible on a non-ASLR system to directly read or write got.plt addresses (and other addresses such as data - this is necessary for normal program functioning - but stack is not reachable directly?) no overflow necessary: <https://ir0nstone.gitbook.io/notes/binexp/stack/got-overwrite/exploiting-a-got-overwrite>, it exists in its memory space so to speak. Example with stack buffer overflow (TODO how and TODO why is overflow used here) <https://www.exploit-db.com/papers/13203>. \
+Even if technically a overflow doesn't change anything here, NOTE! Overflow attacks might however be used in-the-wild as an attacker will try to change the process' execution path without modifying the binary (as the binary could have no write permissions, or communicated with remotely over the Internet, etc.),
+which in this context could be an integer overflow leading to out-of-bounds write, overwriting a single address in got.plt.
+- Note that ASLR / PIE can make these attacks more difficult. GOT-related attacks are done to bypass certain protection mechanisms such as NX-bit.
 
-##### Lazy Binding, PLT, GOT
 
-__tl;dr__ By disabling lazy binding (i.e. to instead load all dynamically linked functions at beginning of execution),
-we may make the GOT read-only and thus avoid potential exploits. This is called RELRO, and can be passed to the linker.
-
-Source for this subsection: [lazy-binding].
+_Source for this subsection: [lazy-binding]_.
 
 Not for Linux... but to get the idea;
 
