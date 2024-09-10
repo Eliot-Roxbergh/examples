@@ -381,10 +381,10 @@ we may make the GOT read-only and thus avoid potential exploits. This is called 
 - .got includes variable addresses, .got.plt includes function addresses: <https://stackoverflow.com/questions/11676472/what-is-the-difference-between-got-and-got-plt-section>, <https://stevens.netmeister.org/631/elf.html>
 - Partial RELRO (as opposed to Full RELRO) is default in GCC and ONLY protects .got, thus .got.plt is still writable and exploitable: <https://book.hacktricks.xyz/binary-exploitation/common-binary-protections-and-bypasses/relro#partial-relro>, <https://www.mdpi.com/2076-3417/12/13/6702>.
 - With Full RELRO an attacker could try to perform buffer overflow attacks to replace the return address to a viable gadget already in got.plt. The GOT cannot be modified, period.
-- With Partial RELRO _(here assumes no ASLR)_ it's possible perform different kinds of _simpler_ attacks to replace the .got.plt entry itself;
+- With Partial RELRO _(here assumes no ASLR/PIE)_ it's possible perform different kinds of _simpler_ attacks to replace the .got.plt entry itself;
 <https://medium.com/@0xwan/binary-exploitation-heap-overflow-to-overwrite-got-d3c7d97716f1>.
 First of all we can on a non-ASLR system directly read or write to the got.plt addresses (and other addresses such as data) - this is necessary for normal program functioning: in this case it needs to be because GOT uses lazy-binding as described below?
-That is, no magic necessary - we can simply make a memory write - if we control the code: <https://ir0nstone.gitbook.io/notes/binexp/stack/got-overwrite/exploiting-a-got-overwrite>, it exists in its memory space (literally).
+That is - no magic necessary - we can simply make a memory write, if we control the code: <https://ir0nstone.gitbook.io/notes/binexp/stack/got-overwrite/exploiting-a-got-overwrite>, it exists in the process' memory space (literally).
 Why use complex overflow techniques to overwrite got.plt entries then? Answer: overflow or similar attacks might be used in-the-wild as an attacker will want try to change the process' execution path without modifying the binary (as the binary could have no write permissions, or communicated with remotely over the Internet, etc.), which in this case could be done by somehow overwriting a single address in got.plt via arbitrary write.
 One can imagine different ways where overflows, integer overflows, stack overflows or other methods could create arbitrary ("out-of-bounds") writes here.\
 Questions/WIP: \
