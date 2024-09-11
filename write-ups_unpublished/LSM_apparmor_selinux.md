@@ -103,18 +103,20 @@ For instance, the file 'file_contexts' holds regex to file(s) and the default co
 Example: \
 The boolean 'allow_ftpd_anon_write'[3] modifies the policy for ftpd to allow so-called anonymous users to write to disk. This is achieved with the _type_ 'public_content_rw_t' (to put it simply: like a special file permission), which is applied to files or directories that the anonymous user should have access to.
 As the application (ftpd) itself is not aware of SELinux, SELinux bases this on the process and file _types_. _**TODO:** question, how does SELinux correctly identify that the FTP user writing is anonymous?_
-- **Domain**:
+- **Domain**: processes (to put it simply: processes run in domains and are thereby separated from each other and can be granted different permissions)
+- **Macros**: ...similar to macros in programming...
 
 ¹ See Multi-Level Security (**MLS**) and Multi-Category Security (**MCS**): _<https://selinuxproject.org/page/MLSStatements>, <https://selinuxproject.org/page/MultiCategorySecurity>, <https://www.redhat.com/en/blog/why-you-should-be-using-multi-category-security-your-linux-containers>_
 
 **Example of file types and names:**
 - Booleans: `booleans.local` (persistent config of which booleans should be on)
-- Policy: `policy.30` (all the compiled rules that will be used by SELinux system-wide, `.30` is simply the policy version). \
+- Policy: `policy.30` `sepolicy/*` (the compiled rules that will be used by SELinux system-wide, `.30` is simply the policy version). \
 It may for instance be viewed with `seinfo policy.30  --all`
 - Contexts: e.g. `file_contexts`, `file_context*`, (for _file_ system objects), this specifies the default contexts (labels) for different files and directories on disk.
 Files may be deviate from this default (e.g. if it's simply moved there or was manually changed), it can optionally be restored with `restorecon`. \
 Example line: `/var/ftp(/.*)?    system_u:object_r:ftpd_anon_rw_t:s0`
 - Policy module: binary `localpolicy.pp`, source `localpolicy.te` (monolithic policies vs individual loadable policies [5])
+- Macros: `*macros`, `*.m4`
 
 **To build binary policy, some relevant files [4][5]:** policy source `policy.conf`, loadable modules `*.te` (monolithic policies will be included in policy, individual loadable policies compiled to separate binary `*.pp`), contexts `*_context*` `contexts/*`, users and roles `seusers` `users` `roles`, makefile `makefile` \
 **Runtime config:** e.g. booleans `booleans*` \
