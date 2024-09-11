@@ -388,22 +388,22 @@ we may make the GOT read-only and thus avoid potential exploits. This is called 
 First of all we can on a non-ASLR system directly read or write to the got.plt addresses (and other addresses such as data) - this is necessary for normal program functioning: in this case it needs to be because GOT uses lazy-binding as described below?
 That is - no magic necessary - we can simply make a memory write, if we control the code: <https://ir0nstone.gitbook.io/notes/binexp/stack/got-overwrite/exploiting-a-got-overwrite>, it exists in the process' memory space (literally).
 Why use complex overflow techniques to overwrite got.plt entries then? Answer: overflow or similar attacks might be used in-the-wild as an attacker will want try to change the process' execution path without modifying the binary (as the binary could have no write permissions, or communicated with remotely over the Internet, etc.), which in this case could be done by somehow overwriting a single address in got.plt via arbitrary write.
-One can imagine different ways where overflows, integer overflows, stack overflows or other methods could create arbitrary ("out-of-bounds") writes here.
+One can imagine different ways where overflows, integer overflows, stack overflows or other methods could create arbitrary ("out-of-bounds") writes here - overwriting entries in the got.plt.
 - Note that ASLR / PIE makes these attacks more difficult (the difficulty e.g. can depend on how well ASLR is configured in the kernel, such as number of ASLR random offset bits: `CONFIG_ARCH_MMAP_RND_BITS`).
 - GOT-related attacks are done to bypass certain protection mechanisms such as NX-bit. As usual, very simple attacks exist for non-hardened binaries (e.g. stack overflow + executable stack), as hardening is applied attacks get increasingly more complex and creative.
 
-Questions/WIP: \
--  _My understanding is that: the stack grows downwards with new allocations and as it does the start of the stack decreases, moreover the addressing starts there and goes _upwards_ meaning we cannot directly "go down in memory", i.e. read/write to the heap, or GOT, for instance (which would in this case only be technically reachable with many new allocations that would error out due to overflow into, "overlap with", heap memory) (<https://security.stackexchange.com/questions/135786/if-the-stack-grows-downwards-how-can-a-buffer-overflow-overwrite-content-above/135798#135798>) - even if we could probably use this overflow in multiple steps, e.g. \w gadgets, to achieve the same in practice._ \
-- _Example with stack buffer overflow (TODO how and TODO why is overflow used here) <https://www.exploit-db.com/papers/13203>._
+Questions/WIP:
+-  My understanding is that: the stack grows downwards with new allocations and as it does the start of the stack decreases, moreover the addressing starts there and goes _upwards_ meaning we cannot directly "go down in memory", i.e. read/write to the heap, or GOT, for instance (which would in this case only be technically reachable with many new allocations that would error out due to overflow into, "overlap with", heap memory) (<https://security.stackexchange.com/questions/135786/if-the-stack-grows-downwards-how-can-a-buffer-overflow-overwrite-content-above/135798#135798>) - even if we could probably use this overflow in multiple steps, e.g. \w gadgets, to achieve the same in practice (without overwriting the got.plt at all or if somehow a stack value is somehow used in a memory write operation).
+- Example with stack buffer overflow (TODO how and TODO why is overflow used here) <https://www.exploit-db.com/papers/13203>.
 
 
 In addition, remember that:
-- A heap overflow (i.e. when we write beyond the end of value in memory) is dangerous because it can: \
- 1. In theory create confusion for the memory manager as to create an arbitrary-write condition (e.g. by overwriting internal metadata for that memory block), this is described in a later chapter. \
- 2. More commonly, (dependent on the program) exploit by overwriting other heap-stored values. This can be things such as, an address to a value (e.g. enabling arbitrary write), or address to a function pointer (e.g. jump to arbitrary location = code execution). This can have powerful effects, but requires that these modified values are used in the consecutive execution of the program, such as in arguments to strcpy (enabling arbitrary write) and so on. \
- 3. Even if it would be possible to reach far into other memory areas, such as the stack (depending on the architecture), directly by heap overflow. (As the heap grows upwards on x86, towards the stack, I presume this theoretically possible).
+- A heap overflow (i.e. when we write beyond the end of value in memory) is dangerous because it can:
+   1. In theory create confusion for the memory manager as to create an arbitrary-write condition (e.g. by overwriting internal metadata for that memory block), this is described in a later chapter.
+   2. More commonly, (dependent on the program) exploit by overwriting other heap-stored values. This can be things such as, an address to a value (e.g. enabling arbitrary write), or address to a function pointer (e.g. jump to arbitrary location = code execution). This can have powerful effects, but requires that these modified values are used in the consecutive execution of the program, such as in arguments to strcpy (enabling arbitrary write) and so on.
+   3. Even if it would be possible to reach far into other memory areas, such as the stack (depending on the architecture), directly by heap overflow. (As the heap grows upwards on x86, towards the stack, I presume this theoretically possible).
 In reality this is unlikely, as the heap overflow would require the overwriting of A LOT of memory to reach the stack (and then we have hardening techniques such as ASLR to make this even more difficult)
-- There's nothing magical about stack memory, we can for instance dereference a normal (stack) variable to get its address.
+- (Obviously) there's nothing magical about stack memory, we can for instance dereference a normal (stack) variable to get its address.
 
 --------------
 
