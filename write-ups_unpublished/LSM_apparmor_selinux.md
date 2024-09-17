@@ -104,7 +104,25 @@ Example: \
 The boolean 'allow_ftpd_anon_write'[3] modifies the policy for ftpd to allow so-called anonymous users to write to disk. This is achieved with the _type_ 'public_content_rw_t' (to put it simply: like a special file permission), which is applied to files or directories that the anonymous user should have access to.
 As the application (ftpd) itself is not aware of SELinux, SELinux bases this on the process and file _types_. _**TODO:** question, how does SELinux correctly identify that the FTP user writing is anonymous?_
 - **Domain**: processes (to put it simply: processes run in domains and are thereby separated from each other and can be granted different permissions)
-- **Macros**: ...similar to macros in programming... [6]
+- **Macros**: ...similar to macros in programming... [6] \
+- **Type attributes**: A grouping of multiple types and can be referenced in the same way (example below)
+
+```bash
+# Minor example, a bit out of context: Domains, types, type attributes
+
+# Give some types the attribute of file_type.
+#  Then grant access to a domain (some_domain) to read all files with those types
+#  (i.e. types included in the file_type type attribute, which to reiterate is a collection of types)
+typeattribute app_data_file_t file_type;
+typeattribute system_log_file_t file_type;
+allow some_domain file_type: file { read getattr };
+
+# Normal apps however does not have access to file_type objects, as we defined above.
+# We can instead grant them more granular permissions
+# by granting them only access to one of the smaller types (and not the whole type attribute) 
+allow untrusted_app app_data_file_t: file { read write open getattr };
+allow system_app system_log_file_t: file { read write getattr };
+```
 
 ¹ See Multi-Level Security (**MLS**) and Multi-Category Security (**MCS**): _<https://selinuxproject.org/page/MLSStatements>, <https://selinuxproject.org/page/MultiCategorySecurity>, <https://www.redhat.com/en/blog/why-you-should-be-using-multi-category-security-your-linux-containers>_
 
