@@ -174,10 +174,12 @@ Also:
 
 ### Headers
 - CSP: block calls from an iframe and block what's included on page (all resources), so good against clickjacking (iframe) and XSS.
-- CSRF protections (not a specific header but often added as e.g. a token in header): recommended to have as it could be dangerous for any other site to make GET / POST request to a URL directly (as it will use active cookies) - "clickjacking".
+- CSRF protections (not a specific header but often added as e.g. a token in header): recommended to have as it could be dangerous for any other site to make GET / POST request to a URL directly - "clickjacking". Basically only a risk if auth. cookies are SameSite=None/Lax (not issue with auth via authorization header / local storage).
 - CORS: CORS headers start with "Access-Control-" and are checked via an extra initial (preflight) request which makes an HTTP OPTION request.
        CORS "determines whether browsers block frontend JavaScript code from accessing responses for cross-origin requests".
        So for instance, allow (javascript) Fetch requests - or equivalent - to make requests and also use cookies etc., when done cross-origin.
+       To be clear, it is better to not have any CORS headers at all in which case Fetch will fail.
+       If CORS headers are indeed used, this may be an issue if auth is done via cookies with SameSite=None/Lax or via authorization header (local storage), depending on CORS config (such as allowed origin as well as Access-Control-Allow-Headers: Authorization, or for cookies, Access-Control-Allow-Credentials: true)
 - Referer: site where we're coming from
 - Origin: site that makes request (Note: usually same-origin, except cases such as Fetch mentioned above. So CORS does often not "matter": e.g. if following a link on badsite.x to site, or site in an iframe on badsite.x)
 
@@ -192,6 +194,8 @@ Note that same site requests are always allowed such as cookies from _monkey.r0x
 Note the definition of SameSite, for instance *.github.com are **different** "sites" (as per https://publicsuffix.org/), while *.r0x.se would all be considered SameSite (see also e.g. https://jub0bs.com/posts/2021-01-29-great-samesite-confusion/).
 
 
+
 ### General
-- iframe: is a separate environment "similar to" another tab. An iframe usually includes browser cookies if already logged in to that site elsewhere (if other domain must be SameSite=None),
-however the site outside the iframe cannot read them (or vice versa); however it's possible to communicate between site and iframe if both sides enables this communication.
+- iframe: is a separate environment "similar to" another tab. An iframe usually includes browser cookies if already logged in to that site elsewhere (although if other domain must be SameSite=None),
+however the site outside the iframe cannot read them (or vice versa); however it's possible to communicate between site and iframe if both sides enables this communication. \
+Risks with iframe is mainly that of clickjacking _(attacker can overlay invisible objects, trying to catch user input or otherwise fool the user performing some website action)_ and information leaks _(either if site includes code that allows leakage to site outside of iframe, or, via indirect methods such as timing attacks or where a user clicks via overlays)_.
